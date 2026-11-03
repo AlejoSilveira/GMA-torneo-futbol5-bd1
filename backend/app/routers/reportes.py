@@ -92,12 +92,16 @@ def promedio_goles(torneo: int, db=Depends(solo_admin)):
             FROM partido p
             WHERE p.id_torneo = %s AND p.estado = 'jugado'
         )
-        SELECT CAST(numero_fecha AS CHAR) AS fecha, COUNT(*) AS partidos,
-               CAST(SUM(goles) AS SIGNED) AS goles, ROUND(AVG(goles), 2) AS promedio
-        FROM x GROUP BY numero_fecha
-        UNION ALL
-        SELECT 'Total', COUNT(*), CAST(COALESCE(SUM(goles), 0) AS SIGNED), ROUND(COALESCE(AVG(goles), 0), 2)
-        FROM x
+        SELECT fecha, partidos, goles, promedio FROM (
+            SELECT numero_fecha AS orden, CAST(numero_fecha AS CHAR) AS fecha, COUNT(*) AS partidos,
+                   CAST(SUM(goles) AS SIGNED) AS goles, ROUND(AVG(goles), 2) AS promedio
+            FROM x GROUP BY numero_fecha
+            UNION ALL
+            SELECT 999999, 'Total', COUNT(*), CAST(COALESCE(SUM(goles), 0) AS SIGNED),
+                   ROUND(COALESCE(AVG(goles), 0), 2)
+            FROM x
+        ) r
+        ORDER BY orden
     """, (torneo,))
 
 
@@ -174,7 +178,7 @@ def estado_partidos(torneo: int, db=Depends(solo_admin)):
         ),
         total AS (SELECT COUNT(*) AS n FROM partido WHERE id_torneo = %s)
         SELECT es.estado, COUNT(p.id_partido) AS cantidad,
-               ROUND(100 * COUNT(p.id_partido) / NULLIF((SELECT n FROM total), 0), 2) AS porcentaje
+               COALESCE(ROUND(100 * COUNT(p.id_partido) / NULLIF((SELECT n FROM total), 0), 2), 0) AS porcentaje
         FROM estados es
         LEFT JOIN partido p ON p.estado = es.estado AND p.id_torneo = %s
         GROUP BY es.estado

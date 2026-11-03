@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
 from .. import util
+from ..errores import conflicto
 from ..seguridad import solo_admin
 
 router = APIRouter(prefix="/sanciones", tags=["sanciones"])
@@ -24,6 +25,10 @@ def _sancion(db, id_sancion: int) -> dict:
 def _validar(db, s: SancionIn) -> None:
     util.torneo(db, s.id_torneo)
     util.obtener(db, "SELECT 1 FROM jugador WHERE ci=%s", (s.ci_jugador,), "el jugador")
+    # Solo se sanciona a quien juega esa edición (si no, la sanción no tendría equipo ni fecha)
+    if not db.uno("SELECT 1 FROM equipo_jugador_torneo WHERE ci_jugador=%s AND id_torneo=%s",
+                  (s.ci_jugador, s.id_torneo)):
+        raise conflicto("El jugador no integra ningún equipo en esa edición del torneo")
 
 
 @router.get("")

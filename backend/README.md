@@ -13,6 +13,28 @@ uvicorn app.main:app --reload --port 8000
 
 Documentación interactiva: http://localhost:8000/docs
 
+## Con Docker
+
+```bash
+docker build -t torneo-backend backend
+docker run --env-file backend/.env -e DB_HOST=host.docker.internal -p 8000:8000 torneo-backend
+```
+
+En el `docker-compose` va con `env_file: backend/.env` y `DB_HOST=db`.
+
+## Prueba de punta a punta
+
+`pruebas/prueba_api.py` recorre un torneo entero (inscripción, partido, planilla, goles, tarjetas,
+sanciones, reportes) y controla que cada regla responda el código que corresponde. Crea datos
+nuevos cada vez: correrla contra una base **de prueba**.
+
+```bash
+pip install -r requirements-dev.txt
+set PRUEBA_ADMIN=correo_admin:contraseña
+set PRUEBA_PLANILLERO=correo_planillero:contraseña
+python -m pruebas.prueba_api
+```
+
 ## Estructura
 
 | Archivo | Qué hace |
@@ -22,6 +44,7 @@ Documentación interactiva: http://localhost:8000/docs
 | `app/seguridad.py` | bcrypt, token JWT con el rol, dependencias `solo_admin` / `admin_o_planillero` |
 | `app/errores.py` | Formato `{"error": "..."}` y mapeo de errores MySQL (1644/1062/1451/1452 → 409, 3819 → 400) |
 | `app/routers/` | Un archivo por recurso del `docs/api.md` |
+| `pruebas/prueba_api.py` | Prueba de punta a punta (ver abajo) |
 
 ## Decisiones
 
@@ -32,8 +55,9 @@ Documentación interactiva: http://localhost:8000/docs
 
 ## Reglas que decidimos en el back (además de las de la letra)
 
-- **Torneo**: solo avanza de etapa en orden. Para pasar a `en_curso`: al menos 2 equipos, todos con 5 a 10 jugadores y capitán. Para `finalizado`: sin partidos programados ni postergados. Solo se borra si no tiene equipos ni partidos.
+- **Torneo**: solo avanza de etapa en orden. Para pasar a `en_curso`: al menos 2 equipos, todos con 5 a 10 jugadores y capitán. Para `finalizado`: sin partidos programados ni postergados. Solo se borra si no tiene equipos ni partidos. No se le pueden cambiar las fechas si deja partidos afuera.
 - **Equipo**: se crea sin capitán (`ci_capitan` null) y se asigna con PUT cuando ya está en el plantel. No se puede quitar al capitán del plantel. Durante la inscripción se puede bajar de 5 jugadores (se está armando); el mínimo se exige al programar partidos y al empezar el torneo. Número de camiseta 1–99, sin repetir en el equipo.
 - **Jugador**: no se le cambia facultad o tipo si ya integra un plantel (rompería las reglas del equipo).
-- **Partido**: el día tiene que estar dentro de las fechas del torneo. Reprogramar un postergado lo vuelve a `programado`. Un partido jugado o cancelado no cambia de estado. El planillero solo puede marcar `jugado`; postergar/cancelar es del admin.
+- **Partido**: el día tiene que estar dentro de las fechas del torneo. Reprogramar un postergado lo vuelve a `programado`. Un partido jugado o cancelado no cambia de estado. El planillero solo puede marcar `jugado`; postergar/cancelar es del admin. Un postergado se reprograma antes de marcarlo jugado.
 - **Planilla, goles y tarjetas**: se cargan desde que termina el turno hasta 48 h después (hora de Uruguay). No en partidos cancelados o postergados. Para quitar a alguien de la planilla primero se borran sus goles/tarjetas.
+- **Sanción manual**: solo a jugadores que integran un equipo en esa edición.

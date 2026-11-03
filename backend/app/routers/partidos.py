@@ -157,6 +157,8 @@ def cambiar_estado(id_partido: int, body: EstadoIn, db=Depends(admin_o_planiller
     if p["estado"] == "cancelado":
         raise conflicto("Un partido cancelado no puede cambiar de estado")
     if body.estado == "jugado":
+        if p["estado"] == "postergado":
+            raise conflicto("El partido está postergado; reprogramalo antes de marcarlo como jugado")
         _, fin = util.inicio_y_fin_partido(p)
         if util.ahora() < fin:
             raise conflicto("Solo se puede marcar como jugado cuando ya pasaron su día y turno")

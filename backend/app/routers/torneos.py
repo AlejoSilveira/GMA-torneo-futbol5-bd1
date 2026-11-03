@@ -53,6 +53,10 @@ def crear(t: TorneoIn, db=Depends(solo_admin)):
 @router.put("/{id_torneo}")
 def modificar(id_torneo: int, t: TorneoIn, db=Depends(solo_admin)):
     util.torneo(db, id_torneo)
+    # Los partidos ya programados tienen que seguir cayendo dentro de las nuevas fechas
+    if db.uno("SELECT 1 FROM partido WHERE id_torneo=%s AND estado <> 'cancelado' "
+              "AND (dia < %s OR dia > %s) LIMIT 1", (id_torneo, t.fecha_inicio, t.fecha_fin)):
+        raise conflicto("Hay partidos fuera de las nuevas fechas; reprogramalos antes de cambiarlas")
     db.ejecutar("UPDATE torneo SET nombre=%s, anio=%s, semestre=%s, fecha_inicio=%s, fecha_fin=%s "
                 "WHERE id_torneo=%s",
                 (t.nombre.strip(), t.anio, t.semestre, t.fecha_inicio, t.fecha_fin, id_torneo))

@@ -19,6 +19,8 @@ Si se cambia algo, se actualiza acá primero.
 | --- | --- | --- | --- |
 | POST | `/auth/login` | — | Body `{correo, contrasena}` → `{token, rol}` |
 
+`rol`: `administrador | planillero`. Credenciales de prueba en el README (solo para pruebas).
+
 ## Torneos
 
 | Método | Ruta | Rol | Descripción |
@@ -59,9 +61,9 @@ Body:
 | Método | Ruta | Rol | Descripción |
 | --- | --- | --- | --- |
 | GET | `/equipos?torneo=` | A, P | Equipos de una edición |
-| POST | `/equipos` | A | Crear `{nombre, id_torneo, id_facultad, ci_capitan}` |
+| POST | `/equipos` | A | Crear `{nombre, id_torneo, id_facultad, ci_capitan}` (`ci_capitan` opcional, puede ir `null`) |
 | GET | `/equipos/{id}` | A, P | Detalle con plantel |
-| PUT | `/equipos/{id}` | A | Modificar (nombre, capitán) |
+| PUT | `/equipos/{id}` | A | Modificar (nombre, capitán). El capitán se asigna acá, una vez que ya está en el plantel |
 | DELETE | `/equipos/{id}` | A | Borrar (solo en inscripción) |
 | GET | `/equipos/{id}/plantel` | A, P | `[{ci_jugador, nombre, apellido, tipo, numero_camiseta}]` |
 | POST | `/equipos/{id}/plantel` | A | Agregar `{ci_jugador, numero_camiseta}` |
@@ -69,7 +71,8 @@ Body:
 | DELETE | `/equipos/{id}/plantel/{ci}` | A | Quitar jugador |
 
 Reglas (`409` si fallan): plantel de 5 a 10, máximo 2 docentes/funcionarios, jugador de la misma facultad,
-un solo equipo por edición, cambios solo en etapa de inscripción, capitán debe estar en el plantel.
+un solo equipo por edición, cambios solo en etapa de inscripción, capitán debe estar en el plantel
+(por eso al crear el equipo `ci_capitan` va `null`, y no se puede quitar del plantel al capitán).
 
 ## Complejos y canchas
 

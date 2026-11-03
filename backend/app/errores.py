@@ -67,6 +67,18 @@ def registrar_manejadores(app: FastAPI) -> None:
         return _json(400, f"Dato inválido en '{campo}': {_traducir(primero)}" if campo
                      else f"Dato inválido: {_traducir(primero)}")
 
+    # Rutas que no existen (404), método no permitido (405), etc.: mismo formato {"error"}
+    @app.exception_handler(StarletteHTTPException)
+    async def _http(_: Request, exc: StarletteHTTPException):
+        mensajes = {404: "La ruta no existe", 405: "Método no permitido para esta ruta"}
+        return _json(exc.status_code, mensajes.get(exc.status_code, str(exc.detail)))
+
+    # Cualquier otro error inesperado: se registra en el log y el front recibe el mismo formato
+    @app.exception_handler(Exception)
+    async def _inesperado(_: Request, exc: Exception):
+        log.exception("Error inesperado", exc_info=exc)
+        return _json(500, "Error interno del servidor")
+
 
 def _traducir(err: dict) -> str:
     """Mensajes de Pydantic en español para mostrar en el front."""
@@ -93,7 +105,3 @@ def _traducir(err: dict) -> str:
     if tipo == "value_error":  # validaciones propias (ej. fechas)
         return str(ctx.get("error", err["msg"]))
     return mensajes.get(tipo, err["msg"])
-
-    @app.exception_handler(StarletteHTTPException)
-    async def _http(_: Request, exc: StarletteHTTPException):
-        return _json(exc.status_code, str(exc.detail))
