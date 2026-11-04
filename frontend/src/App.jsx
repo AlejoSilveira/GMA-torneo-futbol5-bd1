@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Jugadores from "./pages/Jugadores";
+import Complejos from "./pages/Complejos";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
@@ -68,6 +69,14 @@ export default function App() {
               element={
                 <RutaProtegida rolPermitido="administrador">
                   <Jugadores />
+                </RutaProtegida>
+              }
+            />
+            <Route
+              path="/complejos"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Complejos />
                 </RutaProtegida>
               }
             />
