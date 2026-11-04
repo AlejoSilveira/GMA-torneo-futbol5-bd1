@@ -433,6 +433,87 @@ td.numero {
   padding: 4px 6px;
 }
 
+/* fixture de partidos */
+th.derecha,
+td.derecha {
+  text-align: right;
+}
+
+th.centro,
+td.centro {
+  text-align: center;
+}
+
+.marcador {
+  display: inline-block;
+  min-width: 64px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  background-color: var(--azul);
+  color: var(--blanco);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.vs {
+  color: var(--gris);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.detalle {
+  display: block;
+  color: var(--gris);
+  font-size: 12px;
+}
+
+.fila-cancelada td {
+  color: #a3a6ab;
+}
+
+.fila-cancelada .marcador,
+.fila-cancelada .vs {
+  text-decoration: line-through;
+}
+
+/* estados de partido */
+.estado-programado {
+  background-color: #e3ecf7;
+  color: var(--azul);
+}
+
+.estado-jugado {
+  background-color: #eaf5ec;
+  color: #1e5c2a;
+}
+
+.estado-postergado {
+  background-color: #fbf4e2;
+  color: #6b4e00;
+}
+
+.estado-cancelado {
+  background-color: #efece6;
+  color: var(--gris);
+}
+
+.select-estado {
+  padding: 5px 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rango-fechas {
+  padding: 6px 0;
+  color: var(--gris);
+  font-size: 14px;
+}
+
 /* pantallas medianas: tablets y ventanas angostas */
 @media (max-width: 900px) {
   header {

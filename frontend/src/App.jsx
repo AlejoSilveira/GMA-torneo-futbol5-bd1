@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Jugadores from "./pages/Jugadores";
 import Complejos from "./pages/Complejos";
 import Equipos from "./pages/Equipos";
+import Partidos from "./pages/Partidos";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
@@ -86,6 +87,14 @@ export default function App() {
               element={
                 <RutaProtegida rolPermitido="administrador">
                   <Equipos />
+                </RutaProtegida>
+              }
+            />
+            <Route
+              path="/partidos"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Partidos />
                 </RutaProtegida>
               }
             />
