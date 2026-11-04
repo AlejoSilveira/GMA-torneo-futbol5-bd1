@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Jugadores from "./pages/Jugadores";
 import Complejos from "./pages/Complejos";
+import Equipos from "./pages/Equipos";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
@@ -77,6 +78,14 @@ export default function App() {
               element={
                 <RutaProtegida rolPermitido="administrador">
                   <Complejos />
+                </RutaProtegida>
+              }
+            />
+            <Route
+              path="/equipos"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Equipos />
                 </RutaProtegida>
               }
             />

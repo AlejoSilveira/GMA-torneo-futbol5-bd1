@@ -56,6 +56,17 @@ export default function Jugadores() {
     cargarDatos();
   }, []);
 
+    useEffect(() => {
+    if (error === "" && mensaje === "") {
+      return;
+    }
+    const temporizador = setTimeout(() => {
+      setError("");
+      setMensaje("");
+    }, 5000);
+    return () => clearTimeout(temporizador);
+  }, [error, mensaje]);
+
   function manejarCambio(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
   }

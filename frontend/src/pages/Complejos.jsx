@@ -52,6 +52,17 @@ export default function Complejos() {
     cargarComplejos();
   }, []);
 
+    useEffect(() => {
+    if (error === "" && mensaje === "") {
+      return;
+    }
+    const temporizador = setTimeout(() => {
+      setError("");
+      setMensaje("");
+    }, 5000);
+    return () => clearTimeout(temporizador);
+  }, [error, mensaje]);
+
   function limpiarMensajes() {
     setError("");
     setMensaje("");
@@ -122,6 +133,10 @@ export default function Complejos() {
 
   function verCanchas(complejo) {
     limpiarMensajes();
+    if (complejoElegido && complejoElegido.id_complejo === complejo.id_complejo) {
+      setComplejoElegido(null);
+      return;
+    }
     setComplejoElegido(complejo);
     setFormCancha(canchaVacia);
     setCanchaEditando(null);
@@ -245,7 +260,11 @@ export default function Complejos() {
               <td>{c.direccion}</td>
               <td>{c.departamento}</td>
               <td>
-                <button onClick={() => verCanchas(c)}>Ver canchas</button>
+                <button onClick={() => verCanchas(c)}>
+                  {complejoElegido && complejoElegido.id_complejo === c.id_complejo
+                    ? "Cerrar canchas"
+                    : "Ver canchas"}
+                </button>
                 <button onClick={() => empezarEdicionComplejo(c)}>Editar</button>
                 <button className="peligro" onClick={() => borrarUnComplejo(c)}>Borrar</button>
               </td>
