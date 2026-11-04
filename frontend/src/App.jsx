@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
+import Jugadores from "./pages/Jugadores";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
@@ -59,6 +60,14 @@ export default function App() {
               element={
                 <RutaProtegida rolPermitido="administrador">
                   <Reportes />
+                </RutaProtegida>
+              }
+            />
+            <Route
+              path="/jugadores"
+              element={
+                <RutaProtegida rolPermitido="administrador">
+                  <Jugadores />
                 </RutaProtegida>
               }
             />
