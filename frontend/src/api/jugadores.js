@@ -21,6 +21,7 @@ let jugadoresPrueba = [
   { ci: "33445566", nombre: "Matías", apellido: "Castro", email: "matias.castro@correo.ucu.edu.uy", fecha_nacimiento: "2002-10-03", id_facultad: 2, tipo: "grado" },
   { ci: "44556677", nombre: "Joaquín", apellido: "Núñez", email: "joaquin.nunez@correo.ucu.edu.uy", fecha_nacimiento: "2004-02-11", id_facultad: 3, tipo: "grado" },
   { ci: "55667788", nombre: "Micaela", apellido: "Ramos", email: "micaela.ramos@correo.ucu.edu.uy", fecha_nacimiento: "2003-05-29", id_facultad: 3, tipo: "grado" },
+  { ci: "66778899", nombre: "Rodrigo", apellido: "Méndez", email: "rodrigo.mendez@correo.ucu.edu.uy", fecha_nacimiento: "2003-09-14", id_facultad: 2, tipo: "grado" },
 ];
 
 export async function listarFacultades() {

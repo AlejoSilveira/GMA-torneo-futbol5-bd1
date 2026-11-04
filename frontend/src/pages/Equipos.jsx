@@ -119,6 +119,11 @@ export default function Equipos() {
     return "Sin capitán";
   }
 
+  function formatearDia(dia) {
+    const partes = dia.split("-");
+    return partes[2] + "/" + partes[1] + "/" + partes[0];
+  }
+
   // equipos
 
   function cambiarFormEquipo(e) {
@@ -329,6 +334,11 @@ export default function Equipos() {
         {torneoActual && (
           <span className={"estado estado-" + torneoActual.estado}>
             {nombresEstado[torneoActual.estado]}
+          </span>
+        )}
+        {torneoActual && (
+          <span className="rango-fechas">
+            Del {formatearDia(torneoActual.fecha_inicio)} al {formatearDia(torneoActual.fecha_fin)}
           </span>
         )}
       </div>

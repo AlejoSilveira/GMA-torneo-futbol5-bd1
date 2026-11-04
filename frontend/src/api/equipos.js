@@ -6,6 +6,7 @@ let equiposPrueba = [
   { id_equipo: 1, nombre: "Ingeniería FC", id_torneo: 1, id_facultad: 1, ci_capitan: "12345678" },
   { id_equipo: 2, nombre: "Los Contadores", id_torneo: 1, id_facultad: 2, ci_capitan: null },
   { id_equipo: 3, nombre: "Ingeniería FC", id_torneo: 2, id_facultad: 1, ci_capitan: "78901234" },
+  { id_equipo: 4, nombre: "Derecho United", id_torneo: 1, id_facultad: 3, ci_capitan: null },
 ];
 
 let plantelesPrueba = [
@@ -18,9 +19,13 @@ let plantelesPrueba = [
   { id_equipo: 2, ci_jugador: "11223344", numero_camiseta: 8 },
   { id_equipo: 2, ci_jugador: "22334455", numero_camiseta: 11 },
   { id_equipo: 3, ci_jugador: "78901234", numero_camiseta: 3 },
+  { id_equipo: 2, ci_jugador: "33445566", numero_camiseta: 6 },
+  { id_equipo: 2, ci_jugador: "66778899", numero_camiseta: 2 },
+  { id_equipo: 4, ci_jugador: "44556677", numero_camiseta: 9 },
+  { id_equipo: 4, ci_jugador: "55667788", numero_camiseta: 10 },
 ];
 
-let proximoId = 4;
+let proximoId = 5;
 
 // funciones de ayuda para el modo prueba
 

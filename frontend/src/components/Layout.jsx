@@ -5,6 +5,7 @@ const menuAdmin = [
   { ruta: "/admin", texto: "Inicio" },
   { ruta: "/jugadores", texto: "Jugadores" },
   { ruta: "/equipos", texto: "Equipos" },
+  { ruta: "/partidos", texto: "Partidos" },
   { ruta: "/complejos", texto: "Complejos" },
   { ruta: "/reportes", texto: "Reportes" },
 ];
