@@ -90,3 +90,75 @@ button:disabled {
   color: #cc0000;
   font-size: 14px;
 }
+/* selects y titulos */
+select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+/* formulario de ABM */
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 900px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.formulario h2,
+.formulario .error,
+.formulario .mensaje,
+.formulario .botones {
+  grid-column: 1 / -1;
+}
+
+.botones {
+  display: flex;
+  gap: 8px;
+}
+
+.mensaje {
+  margin: 0;
+  color: #1a7f37;
+  font-size: 14px;
+}
+
+button.secundario {
+  background-color: #777;
+}
+
+button.peligro {
+  background-color: #cc0000;
+}
+
+/* tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th,
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #eef1f5;
+}
+
+td button {
+  margin-right: 6px;
+  padding: 4px 10px;
+}
