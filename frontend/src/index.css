@@ -120,7 +120,8 @@ main {
 
 /* login */
 .login {
-  width: 380px;
+  width: 100%;
+  max-width: 380px;
   margin: 90px auto;
   background-color: var(--blanco);
   border: 1px solid var(--borde);
@@ -355,4 +356,167 @@ td button {
 .seccion > h2 {
   margin-bottom: 16px;
   font-size: 24px;
+}
+
+/* selector de torneo arriba de la pantalla */
+.filtros {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.filtros select {
+  min-width: 280px;
+}
+
+/* etiqueta con el estado del torneo */
+.estado {
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.estado-inscripcion {
+  background-color: #e3ecf7;
+  color: var(--azul);
+}
+
+.estado-en_curso {
+  background-color: #eaf5ec;
+  color: #1e5c2a;
+}
+
+.estado-finalizado {
+  background-color: #e8e4dc;
+  color: var(--gris);
+}
+
+/* avisos que no son errores */
+.aviso {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-left: 4px solid #d9a21b;
+  background-color: #fbf4e2;
+  color: #6b4e00;
+  font-size: 14px;
+}
+
+/* plantel */
+td.numero {
+  width: 56px;
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--azul);
+}
+
+.capitan {
+  display: inline-block;
+  margin-left: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--azul);
+  color: var(--blanco);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+
+.input-numero {
+  width: 64px;
+  padding: 4px 6px;
+}
+
+/* pantallas medianas: tablets y ventanas angostas */
+@media (max-width: 900px) {
+  header {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 8px 16px;
+    padding: 12px 16px 0;
+  }
+
+  header strong {
+    flex: 1;
+  }
+
+  header span {
+    display: none;
+  }
+
+  header nav {
+    order: 3;
+    flex-basis: 100%;
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 0 6px;
+  }
+
+  header nav a {
+    padding: 12px 10px;
+    white-space: nowrap;
+  }
+
+  main {
+    padding: 24px 16px;
+  }
+
+  /* las tablas se deslizan de costado en vez de romper la página */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .filtros {
+    flex-wrap: wrap;
+  }
+
+  .filtros label,
+  .filtros select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* celulares */
+@media (max-width: 560px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  .formulario {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .botones {
+    flex-wrap: wrap;
+  }
+
+  .botones button {
+    flex: 1;
+  }
+
+  .login {
+    margin: 40px auto;
+  }
+
+  .login h1 {
+    padding: 32px 24px 16px;
+  }
+
+  .login form {
+    padding: 24px;
+  }
+
+  td button {
+    margin: 2px 0 2px 6px;
+  }
 }
