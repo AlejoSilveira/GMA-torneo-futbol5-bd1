@@ -771,6 +771,33 @@ td.columna-barra {
   overflow-x: auto;
 }
 
+/* sanciones */
+.motivo {
+  display: inline-block;
+  width: 11px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: -2px;
+}
+
+.motivo-roja {
+  background-color: #d62828;
+}
+
+.motivo-acumulacion_amarillas {
+  background-color: #f2c200;
+}
+
+.motivo-disciplinaria {
+  background-color: var(--azul);
+}
+
+.detalle-celda {
+  color: var(--gris);
+  font-size: 13px;
+}
+
 /* el menú no entra en una línea: pasa abajo del título */
 @media (max-width: 1150px) {
   header {
