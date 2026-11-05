@@ -6,13 +6,10 @@ import Jugadores from "./pages/Jugadores";
 import Complejos from "./pages/Complejos";
 import Equipos from "./pages/Equipos";
 import Partidos from "./pages/Partidos";
+import Planilla from "./pages/Planilla";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
-}
-
-function Planillero() {
-  return <h1>Panel planillero</h1>;
 }
 
 function Reportes() {
@@ -30,10 +27,14 @@ function RutaProtegida({ rolPermitido, children }) {
     if (usuario.rol === "administrador") {
       return <Navigate to="/admin" />;
     }
-    return <Navigate to="/planillero" />;
+    return <Navigate to="/planillas" />;
   }
 
   return children;
+}
+
+function soloAdmin(pantalla) {
+  return <RutaProtegida rolPermitido="administrador">{pantalla}</RutaProtegida>;
 }
 
 export default function App() {
@@ -50,62 +51,13 @@ export default function App() {
               </RutaProtegida>
             }
           >
-            <Route
-              path="/admin"
-              element={
-                <RutaProtegida rolPermitido="administrador">
-                  <Admin />
-                </RutaProtegida>
-              }
-            />
-            <Route
-              path="/reportes"
-              element={
-                <RutaProtegida rolPermitido="administrador">
-                  <Reportes />
-                </RutaProtegida>
-              }
-            />
-            <Route
-              path="/jugadores"
-              element={
-                <RutaProtegida rolPermitido="administrador">
-                  <Jugadores />
-                </RutaProtegida>
-              }
-            />
-            <Route
-              path="/complejos"
-              element={
-                <RutaProtegida rolPermitido="administrador">
-                  <Complejos />
-                </RutaProtegida>
-              }
-            />
-            <Route
-              path="/equipos"
-              element={
-                <RutaProtegida rolPermitido="administrador">
-                  <Equipos />
-                </RutaProtegida>
-              }
-            />
-            <Route
-              path="/partidos"
-              element={
-                <RutaProtegida rolPermitido="administrador">
-                  <Partidos />
-                </RutaProtegida>
-              }
-            />
-            <Route
-              path="/planillero"
-              element={
-                <RutaProtegida rolPermitido="planillero">
-                  <Planillero />
-                </RutaProtegida>
-              }
-            />
+            <Route path="/admin" element={soloAdmin(<Admin />)} />
+            <Route path="/jugadores" element={soloAdmin(<Jugadores />)} />
+            <Route path="/equipos" element={soloAdmin(<Equipos />)} />
+            <Route path="/partidos" element={soloAdmin(<Partidos />)} />
+            <Route path="/complejos" element={soloAdmin(<Complejos />)} />
+            <Route path="/reportes" element={soloAdmin(<Reportes />)} />
+            <Route path="/planillas" element={<Planilla />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" />} />

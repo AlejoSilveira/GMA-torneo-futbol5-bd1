@@ -6,12 +6,13 @@ const menuAdmin = [
   { ruta: "/jugadores", texto: "Jugadores" },
   { ruta: "/equipos", texto: "Equipos" },
   { ruta: "/partidos", texto: "Partidos" },
+  { ruta: "/planillas", texto: "Planillas" },
   { ruta: "/complejos", texto: "Complejos" },
   { ruta: "/reportes", texto: "Reportes" },
 ];
 
 const menuPlanillero = [
-  { ruta: "/planillero", texto: "Partidos a cargar" },
+  { ruta: "/planillas", texto: "Cargar planillas" },
 ];
 
 export default function Layout() {

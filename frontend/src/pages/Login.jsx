@@ -34,7 +34,7 @@ export default function Login() {
       if (rol === "administrador") {
         navigate("/admin");
       } else {
-        navigate("/planillero");
+        navigate("/planillas");
       }
     } catch (err) {
       setError(err.message);
