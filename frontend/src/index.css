@@ -798,38 +798,37 @@ td.columna-barra {
   font-size: 13px;
 }
 
-/* el menú no entra en una línea: pasa abajo del título */
-@media (max-width: 1150px) {
-  header {
-    flex-wrap: wrap;
-    height: auto;
-    gap: 8px 16px;
-    padding: 12px 16px 0;
-  }
+/* encabezado en dos líneas: título y usuario arriba, menú abajo */
+header {
+  flex-wrap: wrap;
+  height: auto;
+  gap: 8px 16px;
+  padding: 14px 32px 0;
+}
 
-  header strong {
-    flex: 1;
-  }
+header strong {
+  flex: 1;
+}
 
-  header span {
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+header span {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  header nav {
-    order: 3;
-    flex-basis: 100%;
-    overflow-x: auto;
-    margin: 0 -16px;
-    padding: 0 6px;
-  }
+header nav {
+  order: 3;
+  flex-basis: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  margin: 0 -32px;
+  padding: 0 22px;
+}
 
-  header nav a {
-    padding: 12px 10px;
-    white-space: nowrap;
-  }
+header nav a {
+  padding: 12px 10px;
+  white-space: nowrap;
 }
 
 /* pantallas medianas: tablets y ventanas angostas */
@@ -851,6 +850,15 @@ td.columna-barra {
   .filtros select {
     width: 100%;
     min-width: 0;
+  }
+
+    header {
+    padding: 12px 16px 0;
+  }
+
+  header nav {
+    margin: 0 -16px;
+    padding: 0 6px;
   }
 }
 

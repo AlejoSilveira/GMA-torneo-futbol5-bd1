@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 
 const menuAdmin = [
   { ruta: "/admin", texto: "Inicio" },
+  { ruta: "/torneos", texto: "Torneos" },
   { ruta: "/jugadores", texto: "Jugadores" },
   { ruta: "/equipos", texto: "Equipos" },
   { ruta: "/partidos", texto: "Partidos" },
