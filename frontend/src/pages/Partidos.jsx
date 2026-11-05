@@ -386,7 +386,7 @@ export default function Partidos() {
         </div>
       </form>
 
-      <table>
+      <div className="tabla-scroll"><table>
         <thead>
           <tr>
             <th>Fecha</th>
@@ -451,7 +451,7 @@ export default function Partidos() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
     </div>
   );
 }

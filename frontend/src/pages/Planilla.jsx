@@ -367,7 +367,7 @@ export default function Planilla() {
       {error !== "" && <p className="error">{error}</p>}
       {mensaje !== "" && <p className="mensaje">{mensaje}</p>}
 
-      <table>
+      <div className="tabla-scroll"><table>
         <thead>
           <tr>
             <th>Fecha</th>
@@ -415,7 +415,7 @@ export default function Planilla() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
 
       {partido && (
         <div className="seccion">
@@ -471,7 +471,7 @@ export default function Planilla() {
               </div>
             </form>
           )}
-          <table>
+          <div className="tabla-scroll"><table>
             <thead>
               <tr>
                 <th>Min.</th>
@@ -502,7 +502,7 @@ export default function Planilla() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
 
           <h2 className="separado">3. Tarjetas</h2>
           {editable && (
@@ -536,7 +536,7 @@ export default function Planilla() {
               </div>
             </form>
           )}
-          <table>
+          <div className="tabla-scroll"><table>
             <thead>
               <tr>
                 <th>Min.</th>
@@ -569,7 +569,7 @@ export default function Planilla() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
 
           {partido.estado === "programado" && editable && (
             <div className="cierre-planilla">

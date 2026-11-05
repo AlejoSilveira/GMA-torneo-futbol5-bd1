@@ -195,7 +195,7 @@ export default function Jugadores() {
         </div>
       </form>
 
-      <table>
+      <div className="tabla-scroll"><table>
         <thead>
           <tr>
             <th>Cédula</th>
@@ -223,7 +223,7 @@ export default function Jugadores() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
     </div>
   );
 }

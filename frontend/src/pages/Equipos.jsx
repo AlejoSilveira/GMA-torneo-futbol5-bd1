@@ -376,7 +376,7 @@ export default function Equipos() {
         </form>
       )}
 
-      <table>
+      <div className="tabla-scroll"><table>
         <thead>
           <tr>
             <th>Equipo</th>
@@ -411,7 +411,7 @@ export default function Equipos() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
 
       {equipoElegido && (
         <div className="seccion">
@@ -478,7 +478,7 @@ export default function Equipos() {
             </form>
           )}
 
-          <table>
+          <div className="tabla-scroll"><table>
             <thead>
               <tr>
                 <th>Nº</th>
@@ -537,7 +537,7 @@ export default function Equipos() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>

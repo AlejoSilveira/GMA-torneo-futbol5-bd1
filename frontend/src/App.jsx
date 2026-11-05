@@ -7,13 +7,10 @@ import Complejos from "./pages/Complejos";
 import Equipos from "./pages/Equipos";
 import Partidos from "./pages/Partidos";
 import Planilla from "./pages/Planilla";
+import Reportes from "./pages/Reportes";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
-}
-
-function Reportes() {
-  return <h1>Reportes</h1>;
 }
 
 function RutaProtegida({ rolPermitido, children }) {

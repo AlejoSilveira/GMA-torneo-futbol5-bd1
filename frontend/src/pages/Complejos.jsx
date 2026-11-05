@@ -244,7 +244,7 @@ export default function Complejos() {
         </div>
       </form>
 
-      <table>
+      <div className="tabla-scroll"><table>
         <thead>
           <tr>
             <th>Nombre</th>
@@ -271,7 +271,7 @@ export default function Complejos() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
 
       {complejoElegido && (
         <div className="seccion">
@@ -314,7 +314,7 @@ export default function Complejos() {
             </div>
           </form>
 
-          <table>
+          <div className="tabla-scroll"><table>
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -341,7 +341,7 @@ export default function Complejos() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </div>
       )}
     </div>
