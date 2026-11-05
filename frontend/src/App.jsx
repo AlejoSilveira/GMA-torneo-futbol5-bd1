@@ -10,10 +10,7 @@ import Planilla from "./pages/Planilla";
 import Reportes from "./pages/Reportes";
 import Sanciones from "./pages/Sanciones";
 import Torneos from "./pages/Torneos";
-
-function Admin() {
-  return <h1>Panel administrador</h1>;
-}
+import Inicio from "./pages/Inicio";
 
 function RutaProtegida({ rolPermitido, children }) {
   const { usuario } = useAuth();
@@ -50,7 +47,7 @@ export default function App() {
               </RutaProtegida>
             }
           >
-            <Route path="/admin" element={soloAdmin(<Admin />)} />
+            <Route path="/admin" element={soloAdmin(<Inicio />)} />
             <Route path="/torneos" element={soloAdmin(<Torneos />)} />
             <Route path="/jugadores" element={soloAdmin(<Jugadores />)} />
             <Route path="/equipos" element={soloAdmin(<Equipos />)} />
