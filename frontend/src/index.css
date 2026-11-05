@@ -514,6 +514,160 @@ td.centro {
   font-size: 14px;
 }
 
+/* planilla de partido */
+.encabezado-partido {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.equipo-grande {
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--azul);
+}
+
+.equipo-grande.derecha {
+  text-align: right;
+}
+
+.marcador-grande {
+  min-width: 110px;
+  padding: 8px 18px;
+  font-size: 34px;
+  text-align: center;
+}
+
+p.centro {
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+.seccion > h2 {
+  margin-top: 36px;
+}
+
+h2.separado {
+  margin-top: 36px;
+}
+
+.columnas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.columna-equipo {
+  padding: 16px 20px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+
+.columna-equipo h3 {
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--azul);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--azul);
+}
+
+.jugador-planilla {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ebe7df;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.jugador-planilla:last-child {
+  border-bottom: none;
+}
+
+.jugador-planilla input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--verde);
+}
+
+.jugador-planilla.suspendido {
+  color: #a3a6ab;
+  cursor: default;
+}
+
+.camiseta {
+  width: 26px;
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--azul);
+  text-align: center;
+}
+
+.etiqueta-suspendido,
+.etiqueta-autogol {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.etiqueta-suspendido {
+  background-color: #fbecec;
+  color: #8f1d1d;
+}
+
+.etiqueta-autogol {
+  margin-left: 8px;
+  background-color: #efece6;
+  color: var(--gris);
+}
+
+/* tarjetas como las de verdad: un rectangulito vertical */
+.tarjeta {
+  display: inline-block;
+  width: 11px;
+  height: 15px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: -2px;
+}
+
+.tarjeta-amarilla {
+  background-color: #f2c200;
+}
+
+.tarjeta-roja {
+  background-color: #d62828;
+}
+
+.cierre-planilla {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 18px 24px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--verde);
+}
+
+.cierre-planilla p {
+  margin: 0;
+}
+
 /* pantallas medianas: tablets y ventanas angostas */
 @media (max-width: 900px) {
   header {

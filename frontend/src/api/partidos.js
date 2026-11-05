@@ -187,3 +187,19 @@ export async function cambiarEstadoPartido(id, estado) {
   }
   return pedir("/partidos/" + id + "/estado", "PATCH", { estado: estado });
 }
+
+export async function obtenerPartido(id) {
+  if (USAR_MOCK) {
+    return { ...buscarPartido(id) };
+  }
+  return pedir("/partidos/" + id);
+}
+
+// solo para el modo prueba: la planilla actualiza el resultado cuando cambian los goles
+export function actualizarResultadoPrueba(id, golesLocal, golesVisitante) {
+  const partido = partidosPrueba.find((x) => x.id_partido === id);
+  if (partido) {
+    partido.goles_local = golesLocal;
+    partido.goles_visitante = golesVisitante;
+  }
+}
