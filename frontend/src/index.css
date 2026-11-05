@@ -831,6 +831,157 @@ header nav a {
   white-space: nowrap;
 }
 
+/* inicio del admin */
+.torneo-actual {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--azul);
+  border-radius: 6px;
+}
+
+.torneo-actual h2 {
+  margin: 2px 0;
+  font-size: 24px;
+}
+
+.cifras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cifra {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 20px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+
+.cifra-numero {
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--azul);
+}
+
+.cifra-numero small {
+  font-size: 22px;
+  color: var(--gris);
+}
+
+.cifra-texto {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gris);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cifra-alerta {
+  border-top: 4px solid #d9a21b;
+}
+
+.cifra-alerta .cifra-numero {
+  color: #8a6400;
+}
+
+.panel {
+  padding: 16px 20px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+
+.panel h3 {
+  margin: 0 0 8px;
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--azul);
+}
+
+.panel p {
+  margin: 8px 0;
+}
+
+.fila-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ebe7df;
+}
+
+.fila-panel:last-child {
+  border-bottom: none;
+}
+
+.enlace-boton {
+  flex-shrink: 0;
+  padding: 5px 14px;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  color: var(--azul);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.enlace-boton:hover {
+  background-color: var(--azul);
+  color: var(--blanco);
+}
+
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.paso {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  color: var(--texto);
+  text-decoration: none;
+}
+
+.paso:hover {
+  border-color: var(--azul);
+}
+
+.paso strong {
+  display: block;
+  color: var(--azul);
+}
+
+.paso-numero {
+  flex-shrink: 0;
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--verde);
+}
+
 /* pantallas medianas: tablets y ventanas angostas */
 @media (max-width: 900px) {
   main {
