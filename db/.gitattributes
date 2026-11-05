@@ -1,0 +1,4 @@
+# Los scripts que corre el contenedor de MySQL (Linux) tienen que quedar con fin de linea LF,
+# aunque se clone el repo en Windows: un .sh con CRLF falla dentro de Docker.
+*.sh  text eol=lf
+*.sql text eol=lf
