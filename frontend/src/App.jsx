@@ -9,6 +9,7 @@ import Partidos from "./pages/Partidos";
 import Planilla from "./pages/Planilla";
 import Reportes from "./pages/Reportes";
 import Sanciones from "./pages/Sanciones";
+import Torneos from "./pages/Torneos";
 
 function Admin() {
   return <h1>Panel administrador</h1>;
@@ -50,6 +51,7 @@ export default function App() {
             }
           >
             <Route path="/admin" element={soloAdmin(<Admin />)} />
+            <Route path="/torneos" element={soloAdmin(<Torneos />)} />
             <Route path="/jugadores" element={soloAdmin(<Jugadores />)} />
             <Route path="/equipos" element={soloAdmin(<Equipos />)} />
             <Route path="/partidos" element={soloAdmin(<Partidos />)} />
