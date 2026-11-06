@@ -6,7 +6,7 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
     env_file: .env
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./db:/docker-entrypoint-initdb.d:ro
       - datos_mysql:/var/lib/mysql
