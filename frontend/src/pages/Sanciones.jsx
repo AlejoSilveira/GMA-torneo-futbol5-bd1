@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { listarEquipos, listarPlantel } from "../api/equipos";
 import { listarSanciones, crearSancion, editarSancion, borrarSancion } from "../api/sanciones";
+import { normalizar } from "../utils/texto";
 
 const formularioVacio = { ci_jugador: "", numero_fecha_inicio: "", cantidad_fechas: "1" };
 
@@ -22,6 +23,8 @@ export default function Sanciones() {
 
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroMotivo, setFiltroMotivo] = useState("");
 
   async function cargarTorneos() {
     try {
@@ -76,6 +79,8 @@ export default function Sanciones() {
       cancelar();
       cargarJugadores(idTorneo);
       cargarSanciones(idTorneo);
+      setBusqueda("");
+      setFiltroMotivo("");
     }
   }, [idTorneo]);
 
@@ -193,6 +198,27 @@ export default function Sanciones() {
     return "Fechas " + s.numero_fecha_inicio + " a " + ultima;
   }
 
+  const textoBusqueda = normalizar(busqueda.trim());
+
+  const visibles = sanciones.filter((s) => {
+    if (filtroMotivo !== "" && s.motivo !== filtroMotivo) {
+      return false;
+    }
+    if (textoBusqueda === "") {
+      return true;
+    }
+    const jugador = datosJugador(s.ci_jugador);
+    const todo = normalizar(s.ci_jugador + " " + jugador.nombre + " " + jugador.equipo);
+    return todo.includes(textoBusqueda);
+  });
+
+  const hayFiltros = busqueda !== "" || filtroMotivo !== "";
+
+  function limpiarFiltros() {
+    setBusqueda("");
+    setFiltroMotivo("");
+  }
+
   return (
     <div>
       <h1>Sanciones</h1>
@@ -271,6 +297,30 @@ export default function Sanciones() {
         </div>
       </form>
 
+      <div className="barra-busqueda">
+        <input
+          className="buscador"
+          type="search"
+          placeholder="Buscar por jugador, cédula o equipo"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+        <select value={filtroMotivo} onChange={(e) => setFiltroMotivo(e.target.value)}>
+          <option value="">Todos los motivos</option>
+          <option value="roja">Tarjeta roja</option>
+          <option value="acumulacion_amarillas">Acumulación de amarillas</option>
+          <option value="disciplinaria">Disciplinaria</option>
+        </select>
+        <span className="contador">
+          {visibles.length} de {sanciones.length} sanciones
+          {hayFiltros && (
+            <button type="button" className="limpiar" onClick={limpiarFiltros}>
+              Limpiar
+            </button>
+          )}
+        </span>
+      </div>
+
       <div className="tabla-scroll">
         <table>
           <thead>
@@ -284,12 +334,14 @@ export default function Sanciones() {
             </tr>
           </thead>
           <tbody>
-            {sanciones.length === 0 && (
+            {visibles.length === 0 && (
               <tr>
-                <td colSpan="6">No hay sanciones en este torneo</td>
+                <td colSpan="6">
+                  {hayFiltros ? "Ninguna sanción coincide con la búsqueda" : "No hay sanciones en este torneo"}
+                </td>
               </tr>
             )}
-            {sanciones.map((s) => (
+            {visibles.map((s) => (
               <tr key={s.id_sancion}>
                 <td>{datosJugador(s.ci_jugador).nombre}</td>
                 <td>{datosJugador(s.ci_jugador).equipo}</td>

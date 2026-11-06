@@ -6,6 +6,7 @@ import {
   editarJugador,
   borrarJugador,
 } from "../api/jugadores";
+import { normalizar } from "../utils/texto";
 
 const formularioVacio = {
   ci: "",
@@ -15,6 +16,13 @@ const formularioVacio = {
   fecha_nacimiento: "",
   id_facultad: "",
   tipo: "grado",
+};
+
+const nombresTipo = {
+  grado: "Grado",
+  posgrado: "Posgrado",
+  docente: "Docente",
+  funcionario: "Funcionario",
 };
 
 function validarJugador(j) {
@@ -43,6 +51,11 @@ export default function Jugadores() {
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
 
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroFacultad, setFiltroFacultad] = useState("");
+  const [filtroTipo, setFiltroTipo] = useState("");
+  const [orden, setOrden] = useState({ campo: "apellido", ascendente: true });
+
   async function cargarDatos() {
     try {
       setJugadores(await listarJugadores());
@@ -56,7 +69,7 @@ export default function Jugadores() {
     cargarDatos();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
     if (error === "" && mensaje === "") {
       return;
     }
@@ -105,10 +118,11 @@ export default function Jugadores() {
   }
 
   function empezarEdicion(jugador) {
-    setForm(jugador);
+    setForm({ ...jugador, id_facultad: String(jugador.id_facultad) });
     setCiEditando(jugador.ci);
     setError("");
     setMensaje("");
+    window.scrollTo(0, 0);
   }
 
   async function borrar(ci) {
@@ -134,9 +148,64 @@ export default function Jugadores() {
     return "-";
   }
 
+  // buscar, filtrar y ordenar
+
+  function cambiarOrden(campo) {
+    if (orden.campo === campo) {
+      setOrden({ campo: campo, ascendente: !orden.ascendente });
+    } else {
+      setOrden({ campo: campo, ascendente: true });
+    }
+  }
+
+  function flecha(campo) {
+    if (orden.campo !== campo) {
+      return "";
+    }
+    return orden.ascendente ? " ▲" : " ▼";
+  }
+
+  function limpiarFiltros() {
+    setBusqueda("");
+    setFiltroFacultad("");
+    setFiltroTipo("");
+  }
+
+  const texto = normalizar(busqueda.trim());
+
+  let visibles = jugadores.filter((j) => {
+    if (filtroFacultad !== "" && j.id_facultad !== Number(filtroFacultad)) {
+      return false;
+    }
+    if (filtroTipo !== "" && j.tipo !== filtroTipo) {
+      return false;
+    }
+    if (texto === "") {
+      return true;
+    }
+    const todo = normalizar(j.ci + " " + j.nombre + " " + j.apellido + " " + j.email);
+    return todo.includes(texto);
+  });
+
+  visibles = [...visibles].sort((a, b) => {
+    let valorA = a[orden.campo];
+    let valorB = b[orden.campo];
+    if (orden.campo === "id_facultad") {
+      valorA = nombreFacultad(a.id_facultad);
+      valorB = nombreFacultad(b.id_facultad);
+    }
+    const resultado = normalizar(valorA).localeCompare(normalizar(valorB));
+    return orden.ascendente ? resultado : -resultado;
+  });
+
+  const hayFiltros = busqueda !== "" || filtroFacultad !== "" || filtroTipo !== "";
+
   return (
     <div>
       <h1>Jugadores</h1>
+
+      {error !== "" && <p className="error">{error}</p>}
+      {mensaje !== "" && <p className="mensaje">{mensaje}</p>}
 
       <form className="formulario" onSubmit={guardar} noValidate>
         <h2>{ciEditando ? "Modificar jugador" : "Nuevo jugador"}</h2>
@@ -182,9 +251,6 @@ export default function Jugadores() {
           </select>
         </label>
 
-        {error !== "" && <p className="error">{error}</p>}
-        {mensaje !== "" && <p className="mensaje">{mensaje}</p>}
-
         <div className="botones">
           <button type="submit">{ciEditando ? "Guardar cambios" : "Crear"}</button>
           {ciEditando && (
@@ -195,35 +261,81 @@ export default function Jugadores() {
         </div>
       </form>
 
-      <div className="tabla-scroll"><table>
-        <thead>
-          <tr>
-            <th>Cédula</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Nacimiento</th>
-            <th>Facultad</th>
-            <th>Tipo</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {jugadores.map((j) => (
-            <tr key={j.ci}>
-              <td>{j.ci}</td>
-              <td>{j.nombre} {j.apellido}</td>
-              <td>{j.email}</td>
-              <td>{j.fecha_nacimiento}</td>
-              <td>{nombreFacultad(j.id_facultad)}</td>
-              <td>{j.tipo}</td>
-              <td>
-                <button onClick={() => empezarEdicion(j)}>Editar</button>
-                <button className="peligro" onClick={() => borrar(j.ci)}>Borrar</button>
-              </td>
-            </tr>
+      <div className="barra-busqueda">
+        <input
+          className="buscador"
+          type="search"
+          placeholder="Buscar por nombre, cédula o email"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+        <select value={filtroFacultad} onChange={(e) => setFiltroFacultad(e.target.value)}>
+          <option value="">Todas las facultades</option>
+          {facultades.map((f) => (
+            <option key={f.id_facultad} value={f.id_facultad}>
+              {f.nombre}
+            </option>
           ))}
-        </tbody>
-      </table></div>
+        </select>
+        <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}>
+          <option value="">Todos los tipos</option>
+          <option value="grado">Grado</option>
+          <option value="posgrado">Posgrado</option>
+          <option value="docente">Docente</option>
+          <option value="funcionario">Funcionario</option>
+        </select>
+        <span className="contador">
+          {visibles.length} de {jugadores.length} jugadores
+          {hayFiltros && (
+            <button type="button" className="limpiar" onClick={limpiarFiltros}>
+              Limpiar
+            </button>
+          )}
+        </span>
+      </div>
+
+      <div className="tabla-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th className="ordenable" onClick={() => cambiarOrden("ci")}>Cédula{flecha("ci")}</th>
+              <th className="ordenable" onClick={() => cambiarOrden("apellido")}>Jugador{flecha("apellido")}</th>
+              <th className="ordenable" onClick={() => cambiarOrden("email")}>Email{flecha("email")}</th>
+              <th className="ordenable" onClick={() => cambiarOrden("fecha_nacimiento")}>
+                Nacimiento{flecha("fecha_nacimiento")}
+              </th>
+              <th className="ordenable" onClick={() => cambiarOrden("id_facultad")}>
+                Facultad{flecha("id_facultad")}
+              </th>
+              <th className="ordenable" onClick={() => cambiarOrden("tipo")}>Tipo{flecha("tipo")}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibles.length === 0 && (
+              <tr>
+                <td colSpan="7">
+                  {hayFiltros ? "Ningún jugador coincide con la búsqueda" : "No hay jugadores registrados"}
+                </td>
+              </tr>
+            )}
+            {visibles.map((j) => (
+              <tr key={j.ci}>
+                <td>{j.ci}</td>
+                <td>{j.apellido}, {j.nombre}</td>
+                <td>{j.email}</td>
+                <td>{j.fecha_nacimiento.split("-").reverse().join("/")}</td>
+                <td>{nombreFacultad(j.id_facultad)}</td>
+                <td>{nombresTipo[j.tipo]}</td>
+                <td>
+                  <button onClick={() => empezarEdicion(j)}>Editar</button>
+                  <button className="peligro" onClick={() => borrar(j.ci)}>Borrar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
