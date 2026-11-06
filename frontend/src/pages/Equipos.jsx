@@ -11,8 +11,9 @@ import {
   cambiarCamiseta,
   quitarDelPlantel,
 } from "../api/equipos";
-import Escudo from "../components/Escudo";
+import Escudo, { colorEquipo } from "../components/Escudo";
 import { useConfirmar } from "../context/ConfirmarContext";
+import Avatar from "../components/Avatar";
 
 const equipoVacio = { nombre: "", id_facultad: "" };
 const jugadorVacio = { ci_jugador: "", numero_camiseta: "" };
@@ -523,8 +524,11 @@ export default function Equipos() {
                     )}
                   </td>
                   <td>
-                    {p.nombre} {p.apellido}
-                    {equipoElegido.ci_capitan === p.ci_jugador && <span className="capitan">C</span>}
+                    <span className="con-escudo">
+                      <Avatar nombre={p.nombre} apellido={p.apellido} color={colorEquipo(equipoElegido.id_equipo)} />
+                      {p.nombre} {p.apellido}
+                      {equipoElegido.ci_capitan === p.ci_jugador && <span className="capitan">C</span>}
+                    </span>
                   </td>
                   <td>{p.ci_jugador}</td>
                   <td>{p.tipo}</td>

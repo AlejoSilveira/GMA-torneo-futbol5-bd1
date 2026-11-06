@@ -14,7 +14,8 @@ import {
   agregarTarjeta,
   borrarTarjeta,
 } from "../api/planillas";
-import Escudo from "../components/Escudo";
+import Escudo, { colorEquipo } from "../components/Escudo";
+import Avatar from "../components/Avatar";
 
 const golVacio = { ci_jugador: "", minuto: "", autogol: false };
 const tarjetaVacia = { ci_jugador: "", minuto: "", color: "amarilla" };
@@ -337,6 +338,7 @@ export default function Planilla() {
                 onChange={() => cambiarParticipacion(j, idEquipo)}
               />
               <span className="camiseta">{j.numero_camiseta}</span>
+              <Avatar nombre={j.nombre} apellido={j.apellido} color={colorEquipo(idEquipo)} tamano={24} />
               {j.nombre} {j.apellido}
               {suspendido && <span className="etiqueta-suspendido">Suspendido</span>}
             </label>

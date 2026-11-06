@@ -1,6 +1,11 @@
 // escudo generado a partir del equipo: iniciales, color y diseño según su id
 const colores = ["#0b2545", "#2b8a3e", "#c92a2a", "#5f3dc4", "#e67700", "#0b7285", "#862e9c", "#495057"];
 
+// el color de un equipo, para usarlo también en otros lugares
+export function colorEquipo(id) {
+  return colores[id % colores.length];
+}
+
 function iniciales(nombre) {
   const palabras = nombre.trim().split(" ").filter((p) => p !== "");
   if (palabras.length === 1) {
@@ -10,7 +15,7 @@ function iniciales(nombre) {
 }
 
 export default function Escudo({ id, nombre, tamano = 28 }) {
-  const color = colores[id % colores.length];
+  const color = colorEquipo(id);
   const diseno = id % 3;
   const recorte = "escudo-" + id;
 

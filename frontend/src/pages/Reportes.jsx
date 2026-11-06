@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { obtenerReporte } from "../api/reportes";
 import Cargando from "../components/Cargando";
-import Escudo from "../components/Escudo";
+import Escudo, { colorEquipo } from "../components/Escudo";
+import { listarEquipos } from "../api/equipos";
+import { listarPartidos } from "../api/partidos";
+import Avatar from "../components/Avatar";
 
 const reportes = [
   {
@@ -169,6 +172,37 @@ const textos = {
   programado: "Programado",
 };
 
+// agrega G, E o P a la lista de un equipo, como máximo 3 resultados
+function agregarResultado(forma, idEquipo, favor, contra) {
+  if (!forma[idEquipo]) {
+    forma[idEquipo] = [];
+  }
+  if (forma[idEquipo].length >= 3) {
+    return;
+  }
+  let letra = "E";
+  if (favor > contra) {
+    letra = "G";
+  } else if (favor < contra) {
+    letra = "P";
+  }
+  forma[idEquipo].push(letra);
+}
+
+// recorre los partidos jugados del más reciente al más viejo
+function calcularForma(partidos) {
+  const jugados = partidos.filter((p) => p.estado === "jugado");
+  jugados.sort((a, b) => b.numero_fecha - a.numero_fecha);
+  const forma = {};
+  for (const p of jugados) {
+    agregarResultado(forma, p.id_equipo_local, p.goles_local, p.goles_visitante);
+    agregarResultado(forma, p.id_equipo_visitante, p.goles_visitante, p.goles_local);
+  }
+  return forma;
+}
+
+const textoResultado = { G: "Ganó", E: "Empató", P: "Perdió" };
+
 export default function Reportes() {
   const [torneos, setTorneos] = useState([]);
   const [idTorneo, setIdTorneo] = useState(null);
@@ -176,6 +210,8 @@ export default function Reportes() {
   const [filas, setFilas] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
+  const [forma, setForma] = useState({});
+  const [equiposTorneo, setEquiposTorneo] = useState([]);
 
   async function cargarTorneos() {
     try {
@@ -194,6 +230,10 @@ export default function Reportes() {
     setCargando(true);
     try {
       setFilas(await obtenerReporte(elegido.nombre, idTorneo, elegido.sinTorneo));
+      setEquiposTorneo(await listarEquipos(idTorneo));
+      if (elegido.nombre === "posiciones") {
+        setForma(calcularForma(await listarPartidos(idTorneo)));
+      }
     } catch (err) {
       setFilas([]);
       setError(err.message);
@@ -221,6 +261,14 @@ export default function Reportes() {
     }
   }
 
+  function colorDeEquipo(nombre) {
+    const equipo = equiposTorneo.find((e) => e.nombre === nombre);
+    if (equipo) {
+      return colorEquipo(equipo.id_equipo);
+    }
+    return undefined;
+  }
+
   function valorCelda(fila, columna) {
     const valor = fila[columna.campo];
     if (columna.tipo === "equipo") {
@@ -232,7 +280,12 @@ export default function Reportes() {
       );
     }
     if (columna.tipo === "jugador") {
-      return fila.nombre + " " + fila.apellido;
+      return (
+        <span className="con-escudo">
+          <Avatar nombre={fila.nombre} apellido={fila.apellido} color={colorDeEquipo(fila.equipo)} tamano={24} />
+          {fila.nombre} {fila.apellido}
+        </span>
+      );
     }
     if (columna.tipo === "decimal") {
       return Number(valor).toFixed(2);
@@ -304,6 +357,7 @@ export default function Reportes() {
                 {elegido.columnas.map((c) => (
                   <th key={c.campo}>{c.titulo}</th>
                 ))}
+                {elegido.nombre === "posiciones" && <th className="columna-forma">Últimos</th>}            
                 {elegido.barra && <th className="columna-barra"></th>}
               </tr>
             </thead>
@@ -322,13 +376,32 @@ export default function Reportes() {
               )}
               {!cargando &&
                 filas.map((f, i) => (
-                  <tr key={i} className={f.fecha === "Total" ? "fila-total" : ""}>
+                  <tr
+                    key={i}
+                    className={
+                      f.fecha === "Total" ? "fila-total" : elegido.nombre === "posiciones" && i === 0 ? "fila-lider" : ""
+                    }
+                  >
                     {elegido.posicion && <td className="numero">{i + 1}</td>}
                     {elegido.columnas.map((c) => (
                       <td key={c.campo} className={c.destacado ? "destacado" : ""}>
                         {valorCelda(f, c)}
                       </td>
                     ))}
+                    {elegido.nombre === "posiciones" && (
+                      <td className="columna-forma">
+                        <span className="forma">
+                          {(forma[f.id_equipo] || [])
+                            .slice()
+                            .reverse()
+                            .map((r, k) => (
+                              <span key={k} className={"resultado resultado-" + r} title={textoResultado[r]}>
+                                {r}
+                              </span>
+                            ))}
+                        </span>
+                      </td>
+                    )}                    
                     {elegido.barra && (
                       <td className="columna-barra">
                         <div className="barra">
