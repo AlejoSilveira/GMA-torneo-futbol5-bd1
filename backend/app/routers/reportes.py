@@ -185,4 +185,105 @@ def estado_partidos(torneo: int, db=Depends(solo_admin)):
         ORDER BY FIELD(es.estado, 'jugado', 'postergado', 'cancelado', 'programado')
     """, (torneo, torneo))
 
-# Las 3 consultas extra (/reportes/extra-1..3) las define Germán; se agregan cuando pase rutas y columnas.
+# ---------- Consultas extra (propuestas por el grupo) ----------
+
+@router.get("/extra-1")
+def local_visitante(torneo: int, db=Depends(solo_admin)):
+    """Rendimiento de cada equipo de local y de visitante: partidos, puntos y goles."""
+    util.torneo(db, torneo)
+    return db.todos(f"""
+        WITH res AS (
+            SELECT p.id_equipo_local AS loc, p.id_equipo_visitante AS vis,
+                   {util.sql_goles('local')} AS gl, {util.sql_goles('visitante')} AS gv
+            FROM partido p
+            WHERE p.id_torneo = %s AND p.estado = 'jugado'
+        ),
+        filas AS (
+            SELECT loc AS id_equipo, 'L' AS condicion, gl AS gf, gv AS gc FROM res
+            UNION ALL
+            SELECT vis AS id_equipo, 'V' AS condicion, gv AS gf, gl AS gc FROM res
+        )
+        SELECT e.id_equipo, e.nombre AS equipo,
+               CAST(COALESCE(SUM(f.condicion = 'L'), 0) AS SIGNED) AS pj_local,
+               CAST(COALESCE(SUM(CASE WHEN f.condicion = 'L' THEN 3 * (f.gf > f.gc) + (f.gf = f.gc) END), 0) AS SIGNED) AS pts_local,
+               CAST(COALESCE(SUM(CASE WHEN f.condicion = 'L' THEN f.gf END), 0) AS SIGNED) AS gf_local,
+               CAST(COALESCE(SUM(CASE WHEN f.condicion = 'L' THEN f.gc END), 0) AS SIGNED) AS gc_local,
+               CAST(COALESCE(SUM(f.condicion = 'V'), 0) AS SIGNED) AS pj_visitante,
+               CAST(COALESCE(SUM(CASE WHEN f.condicion = 'V' THEN 3 * (f.gf > f.gc) + (f.gf = f.gc) END), 0) AS SIGNED) AS pts_visitante,
+               CAST(COALESCE(SUM(CASE WHEN f.condicion = 'V' THEN f.gf END), 0) AS SIGNED) AS gf_visitante,
+               CAST(COALESCE(SUM(CASE WHEN f.condicion = 'V' THEN f.gc END), 0) AS SIGNED) AS gc_visitante
+        FROM equipo e
+        LEFT JOIN filas f ON f.id_equipo = e.id_equipo
+        WHERE e.id_torneo = %s
+        GROUP BY e.id_equipo, e.nombre
+        ORDER BY pts_local + pts_visitante DESC, e.nombre
+    """, (torneo, torneo))
+
+
+@router.get("/extra-2")
+def ranking_presencias(torneo: int, db=Depends(solo_admin)):
+    """Top 10 de jugadores con más partidos jugados (aparecen en la planilla), con sus goles."""
+    util.torneo(db, torneo)
+    return db.todos("""
+        SELECT j.ci, j.nombre, j.apellido, e.nombre AS equipo,
+               COUNT(*) AS partidos,
+               CAST(COALESCE(SUM(gg.goles), 0) AS SIGNED) AS goles
+        FROM planilla_partido pp
+        JOIN partido p ON p.id_partido = pp.id_partido
+        JOIN jugador j ON j.ci = pp.ci_jugador
+        JOIN equipo e  ON e.id_equipo = pp.id_equipo
+        LEFT JOIN (SELECT id_partido, ci_jugador, COUNT(*) AS goles
+                   FROM gol WHERE autogol = FALSE
+                   GROUP BY id_partido, ci_jugador) gg
+               ON gg.id_partido = pp.id_partido AND gg.ci_jugador = pp.ci_jugador
+        WHERE p.id_torneo = %s AND p.estado = 'jugado'
+        GROUP BY j.ci, j.nombre, j.apellido, e.nombre
+        ORDER BY partidos DESC, goles DESC, j.apellido, j.nombre
+        LIMIT 10
+    """, (torneo,))
+
+
+@router.get("/extra-3")
+def rachas_sin_perder(torneo: int, db=Depends(solo_admin)):
+    """Mejor racha de partidos seguidos sin perder en la edición y racha actual de cada equipo.
+
+    Se ordenan los partidos jugados de cada equipo por día y hora. SUM(perdio) OVER (...) cuenta
+    las derrotas acumuladas: todos los partidos sin perder que tienen el mismo acumulado son una
+    misma racha. La racha actual es la del último grupo (después de la última derrota).
+    """
+    util.torneo(db, torneo)
+    return db.todos(f"""
+        WITH res AS (
+            SELECT p.id_partido, p.dia, t.hora_inicio,
+                   p.id_equipo_local AS loc, p.id_equipo_visitante AS vis,
+                   {util.sql_goles('local')} AS gl, {util.sql_goles('visitante')} AS gv
+            FROM partido p
+            JOIN turno t ON t.id_turno = p.id_turno
+            WHERE p.id_torneo = %s AND p.estado = 'jugado'
+        ),
+        filas AS (
+            SELECT loc AS id_equipo, id_partido, dia, hora_inicio, gl < gv AS perdio FROM res
+            UNION ALL
+            SELECT vis AS id_equipo, id_partido, dia, hora_inicio, gv < gl AS perdio FROM res
+        ),
+        grupos AS (
+            SELECT id_equipo, perdio,
+                   SUM(perdio) OVER (PARTITION BY id_equipo
+                                     ORDER BY dia, hora_inicio, id_partido) AS grupo,
+                   SUM(perdio) OVER (PARTITION BY id_equipo) AS derrotas
+            FROM filas
+        ),
+        rachas AS (
+            SELECT id_equipo, grupo, MAX(derrotas) AS derrotas, SUM(perdio = 0) AS largo
+            FROM grupos
+            GROUP BY id_equipo, grupo
+        )
+        SELECT e.id_equipo, e.nombre AS equipo,
+               CAST(COALESCE(MAX(r.largo), 0) AS SIGNED) AS mejor_racha,
+               CAST(COALESCE(MAX(CASE WHEN r.grupo = r.derrotas THEN r.largo END), 0) AS SIGNED) AS racha_actual
+        FROM equipo e
+        LEFT JOIN rachas r ON r.id_equipo = e.id_equipo
+        WHERE e.id_torneo = %s
+        GROUP BY e.id_equipo, e.nombre
+        ORDER BY mejor_racha DESC, racha_actual DESC, e.nombre
+    """, (torneo, torneo))

@@ -195,7 +195,7 @@ def main():
 
     # ---------- Reportes ----------
     for r in ("posiciones", "goleadores", "fair-play", "promedio-goles", "canchas-turnos", "nunca-jugaron",
-              "sanciones", "estado-partidos"):
+              "sanciones", "estado-partidos", "extra-1", "extra-2", "extra-3"):
         chequear(f"reporte {r}", api.get(f"/api/reportes/{r}?torneo={id_t}", headers=A), 200)
     chequear("reporte jugadores-facultad-tipo", api.get("/api/reportes/jugadores-facultad-tipo", headers=A), 200)
     chequear("planillero no ve reportes (403)", api.get(f"/api/reportes/posiciones?torneo={id_t}", headers=P), 403)
@@ -207,6 +207,21 @@ def main():
     if (goleador["ci"], goleador["goles"]) != (local[1], 2):
         fallas.append("goleadores")
         print(f"MAL goleadores: {goleador}")
+
+    lv = {f["id_equipo"]: f for f in api.get(f"/api/reportes/extra-1?torneo={id_t}", headers=A).json()}
+    if (lv[e1]["pj_local"], lv[e1]["pts_local"], lv[e1]["gf_local"], lv[e2]["pj_visitante"],
+            lv[e2]["pts_visitante"], lv[e2]["gc_visitante"]) != (1, 3, 3, 1, 0, 3):  # 3-1 (incluye un autogol)
+        fallas.append("extra-1 local vs visitante")
+        print(f"MAL extra-1: {lv}")
+    presencias = api.get(f"/api/reportes/extra-2?torneo={id_t}", headers=A).json()
+    if not presencias or presencias[0]["partidos"] != 1 or presencias[0]["goles"] != 2:
+        fallas.append("extra-2 presencias")
+        print(f"MAL extra-2: {presencias[:3]}")
+    rachas = {f["id_equipo"]: (f["mejor_racha"], f["racha_actual"])
+              for f in api.get(f"/api/reportes/extra-3?torneo={id_t}", headers=A).json()}
+    if (rachas[e1], rachas[e2]) != ((1, 1), (0, 0)):
+        fallas.append("extra-3 rachas")
+        print(f"MAL extra-3: {rachas}")
 
     chequear("torneo a finalizado",
              api.patch(f"/api/torneos/{id_t}/estado", json={"estado": "finalizado"}, headers=A), 200)

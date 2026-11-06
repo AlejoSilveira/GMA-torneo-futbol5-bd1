@@ -157,9 +157,9 @@ Todos `GET`, rol A, con `?torneo=<id>` salvo donde se indica.
 | `/reportes/nunca-jugaron` | Inscriptos que nunca figuraron en una planilla |
 | `/reportes/sanciones` | Cantidad por equipo y por motivo |
 | `/reportes/estado-partidos` | % jugados vs. postergados/cancelados |
-| `/reportes/extra-1` | A definir |
-| `/reportes/extra-2` | A definir |
-| `/reportes/extra-3` | A definir |
+| `/reportes/extra-1` | Local vs. visitante: PJ, puntos, GF y GC de local y de visitante por equipo |
+| `/reportes/extra-2` | Ranking de presencias: top 10 con más partidos en planilla (y sus goles) |
+| `/reportes/extra-3` | Rachas sin perder: mejor racha de la edición y racha actual por equipo |
 
 Cada reporte devuelve una lista de filas, por ejemplo:
 ```json
