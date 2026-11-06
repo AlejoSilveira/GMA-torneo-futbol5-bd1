@@ -10,6 +10,7 @@ import {
   borrarPartido,
   cambiarEstadoPartido,
 } from "../api/partidos";
+import { normalizar } from "../utils/texto";
 
 const partidoVacio = {
   numero_fecha: "",
@@ -45,6 +46,9 @@ export default function Partidos() {
 
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [busqueda, setBusqueda] = useState("");
+  const [filtroFecha, setFiltroFecha] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("");
 
   async function cargarInicio() {
     try {
@@ -99,6 +103,9 @@ export default function Partidos() {
       setMensaje("");
       cancelar();
       cargarTorneo(idTorneo);
+      setBusqueda("");
+      setFiltroFecha("");
+      setFiltroEstado("");
     }
   }, [idTorneo]);
 
@@ -264,6 +271,32 @@ export default function Partidos() {
     }
   }
 
+  const fechasDelTorneo = [...new Set(partidos.map((p) => p.numero_fecha))].sort((a, b) => a - b);
+
+  const textoBusqueda = normalizar(busqueda.trim());
+
+  const visibles = partidos.filter((p) => {
+    if (filtroFecha !== "" && p.numero_fecha !== Number(filtroFecha)) {
+      return false;
+    }
+    if (filtroEstado !== "" && p.estado !== filtroEstado) {
+      return false;
+    }
+    if (textoBusqueda === "") {
+      return true;
+    }
+    const equipos = normalizar(nombreEquipo(p.id_equipo_local) + " " + nombreEquipo(p.id_equipo_visitante));
+    return equipos.includes(textoBusqueda);
+  });
+
+  const hayFiltros = busqueda !== "" || filtroFecha !== "" || filtroEstado !== "";
+
+  function limpiarFiltros() {
+    setBusqueda("");
+    setFiltroFecha("");
+    setFiltroEstado("");
+  }
+  
   return (
     <div>
       <h1>Partidos</h1>
@@ -386,6 +419,37 @@ export default function Partidos() {
         </div>
       </form>
 
+      <div className="barra-busqueda">
+        <input
+          className="buscador"
+          type="search"
+          placeholder="Buscar por equipo"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
+        <select value={filtroFecha} onChange={(e) => setFiltroFecha(e.target.value)}>
+          <option value="">Todas las fechas</option>
+          {fechasDelTorneo.map((f) => (
+            <option key={f} value={f}>Fecha {f}</option>
+          ))}
+        </select>
+        <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
+          <option value="">Todos los estados</option>
+          <option value="programado">Programado</option>
+          <option value="jugado">Jugado</option>
+          <option value="postergado">Postergado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+        <span className="contador">
+          {visibles.length} de {partidos.length} partidos
+          {hayFiltros && (
+            <button type="button" className="limpiar" onClick={limpiarFiltros}>
+              Limpiar
+            </button>
+          )}
+        </span>
+      </div>
+
       <div className="tabla-scroll"><table>
         <thead>
           <tr>
@@ -401,12 +465,14 @@ export default function Partidos() {
           </tr>
         </thead>
         <tbody>
-          {partidos.length === 0 && (
+          {visibles.length === 0 && (
             <tr>
-              <td colSpan="9">Este torneo no tiene partidos programados</td>
+              <td colSpan="9">
+                {hayFiltros ? "Ningún partido coincide con la búsqueda" : "Este torneo no tiene partidos programados"}
+              </td>
             </tr>
           )}
-          {partidos.map((p) => (
+          {visibles.map((p) => (
             <tr key={p.id_partido} className={p.estado === "cancelado" ? "fila-cancelada" : ""}>
               <td className="numero">{p.numero_fecha}</td>
               <td>{formatearDia(p.dia)}</td>

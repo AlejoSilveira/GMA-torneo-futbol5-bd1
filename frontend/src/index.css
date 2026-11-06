@@ -984,6 +984,54 @@ header nav a {
   color: var(--verde);
 }
 
+/* buscador y orden de tablas */
+.barra-busqueda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.buscador {
+  flex: 1;
+  min-width: 240px;
+  padding-left: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236b6f76' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='m11 11 4 4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 12px center;
+}
+
+.contador {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gris);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+button.limpiar {
+  padding: 3px 10px;
+  border-color: var(--borde);
+  background-color: transparent;
+  color: var(--gris);
+  font-size: 13px;
+}
+
+button.limpiar:hover {
+  background-color: #e8e4dc;
+}
+
+th.ordenable {
+  cursor: pointer;
+  user-select: none;
+}
+
+th.ordenable:hover {
+  background-color: var(--azul-claro);
+}
+
 /* pantallas medianas: tablets y ventanas angostas */
 @media (max-width: 900px) {
   main {
