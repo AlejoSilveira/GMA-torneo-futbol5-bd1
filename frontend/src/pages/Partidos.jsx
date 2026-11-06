@@ -12,6 +12,7 @@ import {
 } from "../api/partidos";
 import { normalizar } from "../utils/texto";
 import Escudo from "../components/Escudo";
+import { useConfirmar } from "../context/ConfirmarContext";
 
 const partidoVacio = {
   numero_fecha: "",
@@ -34,6 +35,7 @@ const nombresEstado = {
 };
 
 export default function Partidos() {
+  const confirmar = useConfirmar();
   const [torneos, setTorneos] = useState([]);
   const [idTorneo, setIdTorneo] = useState(null);
   const [equipos, setEquipos] = useState([]);
@@ -259,7 +261,7 @@ export default function Partidos() {
 
   async function borrar(p) {
     const texto = nombreEquipo(p.id_equipo_local) + " vs " + nombreEquipo(p.id_equipo_visitante);
-    if (!window.confirm("¿Seguro que querés eliminar el partido " + texto + "?")) {
+    if (!await confirmar("¿Seguro que querés eliminar el partido " + texto + "?")) {
       return;
     }
     limpiarMensajes();

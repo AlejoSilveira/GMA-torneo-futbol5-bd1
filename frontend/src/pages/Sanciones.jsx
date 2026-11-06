@@ -3,6 +3,7 @@ import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos"
 import { listarEquipos, listarPlantel } from "../api/equipos";
 import { listarSanciones, crearSancion, editarSancion, borrarSancion } from "../api/sanciones";
 import { normalizar } from "../utils/texto";
+import { useConfirmar } from "../context/ConfirmarContext";
 
 const formularioVacio = { ci_jugador: "", numero_fecha_inicio: "", cantidad_fechas: "1" };
 
@@ -13,6 +14,7 @@ const nombresMotivo = {
 };
 
 export default function Sanciones() {
+  const confirmar = useConfirmar();
   const [torneos, setTorneos] = useState([]);
   const [idTorneo, setIdTorneo] = useState(null);
   const [jugadores, setJugadores] = useState([]);
@@ -177,7 +179,7 @@ export default function Sanciones() {
 
   async function borrar(s) {
     const nombre = datosJugador(s.ci_jugador).nombre;
-    if (!window.confirm("¿Seguro que querés borrar la sanción de " + nombre + "?")) {
+    if (!await confirmar("¿Seguro que querés borrar la sanción de " + nombre + "?")) {
       return;
     }
     limpiarMensajes();

@@ -9,6 +9,7 @@ import {
   editarCancha,
   borrarCancha,
 } from "../api/complejos";
+import { useConfirmar } from "../context/ConfirmarContext";
 
 const departamentos = [
   "Artigas", "Canelones", "Cerro Largo", "Colonia", "Durazno", "Flores", "Florida",
@@ -20,6 +21,7 @@ const complejoVacio = { nombre: "", direccion: "", departamento: "" };
 const canchaVacia = { nombre_cancha: "", superficie: "sintetico", techada: false };
 
 export default function Complejos() {
+  const confirmar = useConfirmar();
   const [complejos, setComplejos] = useState([]);
   const [formComplejo, setFormComplejo] = useState(complejoVacio);
   const [idEditando, setIdEditando] = useState(null);
@@ -115,7 +117,7 @@ export default function Complejos() {
   }
 
   async function borrarUnComplejo(complejo) {
-    if (!window.confirm("¿Seguro que querés borrar el complejo " + complejo.nombre + "?")) {
+    if (!await confirmar("¿Seguro que querés borrar el complejo " + complejo.nombre + "?")) {
       return;
     }
     limpiarMensajes();
@@ -194,7 +196,7 @@ export default function Complejos() {
   }
 
   async function borrarUnaCancha(cancha) {
-    if (!window.confirm("¿Seguro que querés borrar " + cancha.nombre_cancha + "?")) {
+    if (!await confirmar("¿Seguro que querés borrar " + cancha.nombre_cancha + "?")) {
       return;
     }
     limpiarMensajes();
