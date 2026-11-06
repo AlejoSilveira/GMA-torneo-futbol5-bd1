@@ -5,6 +5,8 @@ import { listarEquipos } from "../api/equipos";
 import { listarPartidos, listarTurnos } from "../api/partidos";
 import { listarSanciones } from "../api/sanciones";
 import Escudo from "../components/Escudo";
+import Cancha from "../components/Cancha";
+import Contador from "../components/Contador";
 
 const nombresEstado = {
   inscripcion: "Inscripción",
@@ -84,6 +86,13 @@ export default function Inicio() {
   const ahora = new Date();
 
   const jugados = partidos.filter((p) => p.estado === "jugado");
+  const jugadosOrdenados = [...jugados].sort((a, b) => {
+    if (a.dia !== b.dia) {
+      return b.dia.localeCompare(a.dia);
+    }
+    return b.id_turno - a.id_turno;
+  });
+  const ultimo = jugadosOrdenados.length > 0 ? jugadosOrdenados[0] : null;
 
   const pendientes = partidos.filter((p) => {
     const fin = finDelPartido(p);
@@ -111,35 +120,57 @@ export default function Inicio() {
 
       {torneo !== null && (
         <>
-          <div className="torneo-actual">
-            <div>
-              <span className="detalle">Torneo actual</span>
+          <div className="banner-torneo">
+            <Cancha className="banner-cancha" />
+            <div className="banner-contenido">
+              <span className="banner-etiqueta">Torneo actual</span>
               <h2>{nombreTorneo(torneo)}</h2>
-              <span className="detalle">
+              <span className="banner-fechas">
                 Del {formatearDia(torneo.fecha_inicio)} al {formatearDia(torneo.fecha_fin)}
               </span>
             </div>
             <span className={"estado estado-" + torneo.estado}>{nombresEstado[torneo.estado]}</span>
           </div>
 
+          {ultimo !== null && (
+            <div className="ultimo-resultado">
+              <span className="etiqueta-seccion">
+                Último resultado · Fecha {ultimo.numero_fecha} · {formatearDia(ultimo.dia)}
+              </span>
+              <div className="marcador-inicio">
+                <span className="equipo-grande derecha">
+                  {nombreEquipo(ultimo.id_equipo_local)}
+                  <Escudo id={ultimo.id_equipo_local} nombre={nombreEquipo(ultimo.id_equipo_local)} tamano={40} />
+                </span>
+                <span className="marcador marcador-grande">
+                  {ultimo.goles_local} - {ultimo.goles_visitante}
+                </span>
+                <span className="equipo-grande">
+                  <Escudo id={ultimo.id_equipo_visitante} nombre={nombreEquipo(ultimo.id_equipo_visitante)} tamano={40} />
+                  {nombreEquipo(ultimo.id_equipo_visitante)}
+                </span>
+              </div>
+            </div>
+          )}
+
           <div className="cifras">
             <div className="cifra">
-              <span className="cifra-numero">{equipos.length}</span>
+              <span className="cifra-numero"><Contador valor={equipos.length} /></span>
               <span className="cifra-texto">Equipos</span>
             </div>
             <div className="cifra">
               <span className="cifra-numero">
-                {jugados.length}
+                <Contador valor={jugados.length} />
                 <small> / {partidos.filter((p) => p.estado !== "cancelado").length}</small>
               </span>
               <span className="cifra-texto">Partidos jugados</span>
             </div>
             <div className={"cifra" + (pendientes.length > 0 ? " cifra-alerta" : "")}>
-              <span className="cifra-numero">{pendientes.length}</span>
+              <span className="cifra-numero"><Contador valor={pendientes.length} /></span>
               <span className="cifra-texto">Planillas pendientes</span>
             </div>
             <div className="cifra">
-              <span className="cifra-numero">{sanciones.length}</span>
+              <span className="cifra-numero"><Contador valor={sanciones.length} /></span>
               <span className="cifra-texto">Sanciones</span>
             </div>
           </div>

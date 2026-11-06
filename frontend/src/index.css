@@ -481,6 +481,177 @@ button.boton-peligro:hover {
   }
 }
 
+/* tabla de posiciones estilo TV */
+.fila-lider td {
+  background-color: #fdf6e3;
+}
+
+.fila-lider td:first-child {
+  box-shadow: inset 4px 0 0 #d4a017;
+  color: #a77b06;
+}
+
+.forma {
+  display: inline-flex;
+  gap: 4px;
+}
+
+th.columna-forma,
+td.columna-forma {
+  width: 110px;
+  text-align: left;
+}
+
+.resultado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: var(--blanco);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.resultado-G {
+  background-color: var(--verde);
+}
+
+.resultado-E {
+  background-color: #8a8f98;
+}
+
+.resultado-P {
+  background-color: var(--rojo);
+}
+
+/* banner del torneo actual en el inicio */
+.banner-torneo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 30px 32px;
+  overflow: hidden;
+  border-radius: 8px;
+  color: var(--blanco);
+  background-color: #2e8b45;
+  background-image:
+    linear-gradient(90deg, rgba(11, 37, 69, 0.85) 0%, rgba(11, 37, 69, 0.35) 65%, transparent 100%),
+    repeating-linear-gradient(90deg, #2e8b45 0, #2e8b45 60px, #33964b 60px, #33964b 120px);
+}
+
+.banner-cancha {
+  position: absolute;
+  top: -15%;
+  right: -8%;
+  width: 60%;
+  height: 130%;
+  opacity: 0.7;
+}
+
+.banner-contenido {
+  position: relative;
+}
+
+.banner-etiqueta {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9fe0ad;
+}
+
+.banner-torneo h2 {
+  margin: 6px 0 4px;
+  font-size: 30px;
+  color: var(--blanco);
+}
+
+.banner-fechas {
+  color: #d5dde8;
+  font-size: 14px;
+}
+
+.banner-torneo .estado {
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* último resultado */
+.ultimo-resultado {
+  margin-bottom: 20px;
+  padding: 18px 24px 22px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.etiqueta-seccion {
+  display: block;
+  margin-bottom: 14px;
+  color: var(--gris);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.marcador-inicio {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+@media (max-width: 560px) {
+  .banner-torneo {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 20px;
+  }
+
+  .banner-torneo h2 {
+    font-size: 24px;
+  }
+
+  /* el resultado se apila: local, marcador y visitante */
+  .marcador-inicio,
+  .encabezado-partido {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .equipo-grande,
+  .equipo-grande.derecha {
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .marcador-grande {
+    justify-self: center;
+  }
+
+  /* las cifras en dos columnas */
+  .cifras {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .cifra {
+    padding: 14px 16px;
+  }
+
+  .cifra-numero {
+    font-size: 32px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fondo-modal,
   .modal,
@@ -885,6 +1056,8 @@ td.centro {
 }
 
 .equipo-grande {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-family: "Barlow Condensed", Arial, sans-serif;
   font-size: 26px;
   font-weight: 700;
