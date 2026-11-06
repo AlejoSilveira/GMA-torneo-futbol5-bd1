@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { listarTorneos, nombreTorneo } from "../api/torneos";
+import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { listarEquipos } from "../api/equipos";
 import { listarPartidos, listarTurnos } from "../api/partidos";
 import { listarSanciones } from "../api/sanciones";
@@ -36,7 +36,7 @@ export default function Inicio() {
       if (torneos.length === 0) {
         return;
       }
-      const actual = torneos[0];
+      const actual = elegirTorneoActual(torneos);
       setTorneo(actual);
       setTurnos(await listarTurnos());
       setEquipos(await listarEquipos(actual.id_torneo));

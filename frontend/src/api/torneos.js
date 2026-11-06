@@ -109,3 +109,17 @@ export function nombreTorneo(t) {
   }
   return t.nombre + " " + t.anio + " - " + t.semestre + "º semestre";
 }
+
+// el torneo que se muestra al entrar: primero el que se está jugando,
+// después el que está en inscripción y si no, el más nuevo
+export function elegirTorneoActual(lista) {
+  const enCurso = lista.find((t) => t.estado === "en_curso");
+  if (enCurso) {
+    return enCurso;
+  }
+  const enInscripcion = lista.find((t) => t.estado === "inscripcion");
+  if (enInscripcion) {
+    return enInscripcion;
+  }
+  return lista[0];
+}

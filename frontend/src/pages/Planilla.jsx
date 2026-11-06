@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos, nombreTorneo } from "../api/torneos";
+import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { listarEquipos, listarPlantel } from "../api/equipos";
 import { listarTurnos, listarPartidos, obtenerPartido, cambiarEstadoPartido } from "../api/partidos";
 import { listarSanciones, estaSuspendido } from "../api/sanciones";
@@ -45,7 +45,7 @@ export default function Planilla() {
       setTorneos(listaTorneos);
       setTurnos(await listarTurnos());
       if (listaTorneos.length > 0) {
-        setIdTorneo(listaTorneos[0].id_torneo);
+        setIdTorneo(elegirTorneoActual(listaTorneos).id_torneo);
       }
     } catch (err) {
       setError(err.message);

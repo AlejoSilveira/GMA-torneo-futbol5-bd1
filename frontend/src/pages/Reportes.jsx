@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos, nombreTorneo } from "../api/torneos";
+import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { obtenerReporte } from "../api/reportes";
 
 const reportes = [
@@ -180,7 +180,7 @@ export default function Reportes() {
       const lista = await listarTorneos();
       setTorneos(lista);
       if (lista.length > 0) {
-        setIdTorneo(lista[0].id_torneo);
+        setIdTorneo(elegirTorneoActual(lista).id_torneo);
       }
     } catch (err) {
       setError(err.message);

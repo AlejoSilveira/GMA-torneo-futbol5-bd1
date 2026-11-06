@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos, nombreTorneo } from "../api/torneos";
+import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { listarFacultades, listarJugadores } from "../api/jugadores";
 import {
   listarEquipos,
@@ -46,7 +46,7 @@ export default function Equipos() {
       setFacultades(await listarFacultades());
       setJugadores(await listarJugadores());
       if (listaTorneos.length > 0) {
-        setIdTorneo(listaTorneos[0].id_torneo);
+        setIdTorneo(elegirTorneoActual(listaTorneos).id_torneo);
       }
     } catch (err) {
       setError(err.message);
