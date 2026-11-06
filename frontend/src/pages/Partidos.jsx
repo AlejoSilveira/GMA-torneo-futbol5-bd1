@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos } from "../api/torneos";
+import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { listarEquipos } from "../api/equipos";
 import { listarComplejos, listarCanchas } from "../api/complejos";
 import {
@@ -53,7 +53,7 @@ export default function Partidos() {
       setTurnos(await listarTurnos());
       setComplejos(await listarComplejos());
       if (listaTorneos.length > 0) {
-        setIdTorneo(listaTorneos[0].id_torneo);
+        setIdTorneo(elegirTorneoActual(listaTorneos).id_torneo);
       }
     } catch (err) {
       setError(err.message);
@@ -277,7 +277,7 @@ export default function Partidos() {
           >
             {torneos.map((t) => (
               <option key={t.id_torneo} value={t.id_torneo}>
-                {t.nombre} {t.anio} - {t.semestre}º semestre
+                {nombreTorneo(t)}
               </option>
             ))}
           </select>

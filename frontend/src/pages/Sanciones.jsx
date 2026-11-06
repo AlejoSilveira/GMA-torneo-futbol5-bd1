@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos } from "../api/torneos";
+import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { listarEquipos, listarPlantel } from "../api/equipos";
 import { listarSanciones, crearSancion, editarSancion, borrarSancion } from "../api/sanciones";
 
@@ -28,7 +28,7 @@ export default function Sanciones() {
       const lista = await listarTorneos();
       setTorneos(lista);
       if (lista.length > 0) {
-        setIdTorneo(lista[0].id_torneo);
+        setIdTorneo(elegirTorneoActual(lista).id_torneo);
       }
     } catch (err) {
       setError(err.message);
@@ -206,7 +206,7 @@ export default function Sanciones() {
           >
             {torneos.map((t) => (
               <option key={t.id_torneo} value={t.id_torneo}>
-                {t.nombre} {t.anio} - {t.semestre}º semestre
+                {nombreTorneo(t)}
               </option>
             ))}
           </select>

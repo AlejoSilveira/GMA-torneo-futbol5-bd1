@@ -1,5 +1,5 @@
 const API_URL = "http://localhost:8000/api";
-export const USAR_MOCK = true;
+export const USAR_MOCK = false;
 
 const usuariosPrueba = [
   { correo: "admin@ucu.edu.uy", contrasena: "admin123", rol: "administrador" },
