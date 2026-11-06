@@ -11,6 +11,7 @@ import Reportes from "./pages/Reportes";
 import Sanciones from "./pages/Sanciones";
 import Torneos from "./pages/Torneos";
 import Inicio from "./pages/Inicio";
+import { ConfirmarProvider } from "./context/ConfirmarContext";
 
 function RutaProtegida({ rolPermitido, children }) {
   const { usuario } = useAuth();
@@ -36,31 +37,33 @@ function soloAdmin(pantalla) {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
+      <ConfirmarProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
 
-          <Route
-            element={
-              <RutaProtegida>
-                <Layout />
-              </RutaProtegida>
-            }
-          >
-            <Route path="/admin" element={soloAdmin(<Inicio />)} />
-            <Route path="/torneos" element={soloAdmin(<Torneos />)} />
-            <Route path="/jugadores" element={soloAdmin(<Jugadores />)} />
-            <Route path="/equipos" element={soloAdmin(<Equipos />)} />
-            <Route path="/partidos" element={soloAdmin(<Partidos />)} />
-            <Route path="/complejos" element={soloAdmin(<Complejos />)} />
-            <Route path="/sanciones" element={soloAdmin(<Sanciones />)} />
-            <Route path="/reportes" element={soloAdmin(<Reportes />)} />
-            <Route path="/planillas" element={<Planilla />} />
-          </Route>
+            <Route
+              element={
+                <RutaProtegida>
+                  <Layout />
+                </RutaProtegida>
+              }
+            >
+              <Route path="/admin" element={soloAdmin(<Inicio />)} />
+              <Route path="/torneos" element={soloAdmin(<Torneos />)} />
+              <Route path="/jugadores" element={soloAdmin(<Jugadores />)} />
+              <Route path="/equipos" element={soloAdmin(<Equipos />)} />
+              <Route path="/partidos" element={soloAdmin(<Partidos />)} />
+              <Route path="/complejos" element={soloAdmin(<Complejos />)} />
+              <Route path="/sanciones" element={soloAdmin(<Sanciones />)} />
+              <Route path="/reportes" element={soloAdmin(<Reportes />)} />
+              <Route path="/planillas" element={<Planilla />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </BrowserRouter>
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </BrowserRouter>
+      </ConfirmarProvider>
     </AuthProvider>
   );
 }

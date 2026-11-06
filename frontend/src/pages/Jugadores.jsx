@@ -7,6 +7,7 @@ import {
   borrarJugador,
 } from "../api/jugadores";
 import { normalizar } from "../utils/texto";
+import { useConfirmar } from "../context/ConfirmarContext";
 
 const formularioVacio = {
   ci: "",
@@ -44,6 +45,7 @@ function validarJugador(j) {
 }
 
 export default function Jugadores() {
+  const confirmar = useConfirmar();
   const [jugadores, setJugadores] = useState([]);
   const [facultades, setFacultades] = useState([]);
   const [form, setForm] = useState(formularioVacio);
@@ -126,7 +128,7 @@ export default function Jugadores() {
   }
 
   async function borrar(ci) {
-    if (!window.confirm("¿Seguro que querés borrar este jugador?")) {
+    if (!await confirmar("¿Seguro que querés borrar este jugador?")) {
       return;
     }
     setError("");

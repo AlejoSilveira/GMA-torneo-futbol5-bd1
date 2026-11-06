@@ -12,6 +12,7 @@ import {
   quitarDelPlantel,
 } from "../api/equipos";
 import Escudo from "../components/Escudo";
+import { useConfirmar } from "../context/ConfirmarContext";
 
 const equipoVacio = { nombre: "", id_facultad: "" };
 const jugadorVacio = { ci_jugador: "", numero_camiseta: "" };
@@ -23,6 +24,7 @@ const nombresEstado = {
 };
 
 export default function Equipos() {
+  const confirmar = useConfirmar();
   const [torneos, setTorneos] = useState([]);
   const [idTorneo, setIdTorneo] = useState(null);
   const [facultades, setFacultades] = useState([]);
@@ -155,7 +157,7 @@ export default function Equipos() {
   }
 
   async function borrarUnEquipo(equipo) {
-    if (!window.confirm("¿Seguro que querés borrar " + equipo.nombre + "? Se borra también su plantel")) {
+    if (!await confirmar("¿Seguro que querés borrar " + equipo.nombre + "? Se borra también su plantel")) {
       return;
     }
     limpiarMensajes();
@@ -295,7 +297,7 @@ export default function Equipos() {
       setError("No se puede quitar al capitán. Primero elegí otro capitán o dejá el equipo sin capitán");
       return;
     }
-    if (!window.confirm("¿Quitar a " + fila.nombre + " " + fila.apellido + " del plantel?")) {
+    if (!await confirmar("¿Quitar a " + fila.nombre + " " + fila.apellido + " del plantel?")) {
       return;
     }
     limpiarMensajes();

@@ -6,6 +6,7 @@ import {
   borrarTorneo,
   cambiarEstadoTorneo,
 } from "../api/torneos";
+import { useConfirmar } from "../context/ConfirmarContext";
 
 const formularioVacio = {
   nombre: "Torneo Interfacultades",
@@ -36,6 +37,7 @@ const siguienteEtapa = {
 };
 
 export default function Torneos() {
+  const confirmar = useConfirmar();
   const [torneos, setTorneos] = useState([]);
   const [form, setForm] = useState(formularioVacio);
   const [idEditando, setIdEditando] = useState(null);
@@ -154,7 +156,7 @@ export default function Torneos() {
 
   async function avanzarEtapa(t) {
     const siguiente = siguienteEtapa[t.estado];
-    if (!window.confirm(siguiente.aviso)) {
+    if (!await confirmar(siguiente.aviso, { textoBoton: siguiente.boton, peligro: false })) {
       return;
     }
     limpiarMensajes();
@@ -169,7 +171,7 @@ export default function Torneos() {
 
   async function borrar(t) {
     const texto = t.nombre + " " + t.anio + " - " + t.semestre + "º semestre";
-    if (!window.confirm("¿Seguro que querés borrar " + texto + "?")) {
+    if (!await confirmar("¿Seguro que querés borrar " + texto + "?")) {
       return;
     }
     limpiarMensajes();
