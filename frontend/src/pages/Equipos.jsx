@@ -290,6 +290,10 @@ export default function Equipos() {
   }
 
   async function quitarJugador(fila) {
+    if (equipoElegido.ci_capitan === fila.ci_jugador) {
+      setError("No se puede quitar al capitán. Primero elegí otro capitán o dejá el equipo sin capitán");
+      return;
+    }
     if (!window.confirm("¿Quitar a " + fila.nombre + " " + fila.apellido + " del plantel?")) {
       return;
     }
