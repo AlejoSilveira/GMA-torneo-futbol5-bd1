@@ -1742,6 +1742,24 @@ th.ordenable:hover {
   background-color: var(--azul-claro);
 }
 
+/* avatar de jugador */
+.avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--blanco);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.capitan {
+  margin-left: 0;
+}
+
 /* pantallas medianas: tablets y ventanas angostas */
 @media (max-width: 900px) {
   main {

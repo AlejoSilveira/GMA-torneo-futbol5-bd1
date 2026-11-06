@@ -7,6 +7,10 @@ import {
   borrarJugador,
 } from "../api/jugadores";
 import { normalizar } from "../utils/texto";
+import Avatar from "../components/Avatar";
+import { colorEquipo } from "../components/Escudo";
+import { listarTorneos, elegirTorneoActual } from "../api/torneos";
+import { listarEquipos, listarPlantel } from "../api/equipos";
 import { useConfirmar } from "../context/ConfirmarContext";
 
 const formularioVacio = {
@@ -57,11 +61,31 @@ export default function Jugadores() {
   const [filtroFacultad, setFiltroFacultad] = useState("");
   const [filtroTipo, setFiltroTipo] = useState("");
   const [orden, setOrden] = useState({ campo: "apellido", ascendente: true });
+  const [equipoDeJugador, setEquipoDeJugador] = useState({});
+
+  // arma un mapa cédula -> equipo con los planteles del torneo actual
+  async function cargarEquiposDeJugadores() {
+    const torneos = await listarTorneos();
+    if (torneos.length === 0) {
+      return;
+    }
+    const actual = elegirTorneoActual(torneos);
+    const equipos = await listarEquipos(actual.id_torneo);
+    const mapa = {};
+    for (const equipo of equipos) {
+      const plantel = await listarPlantel(equipo.id_equipo);
+      for (const p of plantel) {
+        mapa[p.ci_jugador] = equipo.id_equipo;
+      }
+    }
+    setEquipoDeJugador(mapa);
+  }
 
   async function cargarDatos() {
     try {
       setJugadores(await listarJugadores());
       setFacultades(await listarFacultades());
+      await cargarEquiposDeJugadores();
     } catch (err) {
       setError(err.message);
     }
@@ -324,7 +348,16 @@ export default function Jugadores() {
             {visibles.map((j) => (
               <tr key={j.ci}>
                 <td>{j.ci}</td>
-                <td>{j.apellido}, {j.nombre}</td>
+                <td>
+                  <span className="con-escudo">
+                    <Avatar
+                      nombre={j.nombre}
+                      apellido={j.apellido}
+                      color={equipoDeJugador[j.ci] !== undefined ? colorEquipo(equipoDeJugador[j.ci]) : undefined}
+                    />
+                    {j.apellido}, {j.nombre}
+                  </span>
+                </td>
                 <td>{j.email}</td>
                 <td>{j.fecha_nacimiento.split("-").reverse().join("/")}</td>
                 <td>{nombreFacultad(j.id_facultad)}</td>

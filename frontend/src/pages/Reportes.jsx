@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { obtenerReporte } from "../api/reportes";
 import Cargando from "../components/Cargando";
-import Escudo from "../components/Escudo";
+import Escudo, { colorEquipo } from "../components/Escudo";
+import { listarEquipos } from "../api/equipos";
 import { listarPartidos } from "../api/partidos";
+import Avatar from "../components/Avatar";
 
 const reportes = [
   {
@@ -209,6 +211,7 @@ export default function Reportes() {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
   const [forma, setForma] = useState({});
+  const [equiposTorneo, setEquiposTorneo] = useState([]);
 
   async function cargarTorneos() {
     try {
@@ -227,6 +230,7 @@ export default function Reportes() {
     setCargando(true);
     try {
       setFilas(await obtenerReporte(elegido.nombre, idTorneo, elegido.sinTorneo));
+      setEquiposTorneo(await listarEquipos(idTorneo));
       if (elegido.nombre === "posiciones") {
         setForma(calcularForma(await listarPartidos(idTorneo)));
       }
@@ -257,6 +261,14 @@ export default function Reportes() {
     }
   }
 
+  function colorDeEquipo(nombre) {
+    const equipo = equiposTorneo.find((e) => e.nombre === nombre);
+    if (equipo) {
+      return colorEquipo(equipo.id_equipo);
+    }
+    return undefined;
+  }
+
   function valorCelda(fila, columna) {
     const valor = fila[columna.campo];
     if (columna.tipo === "equipo") {
@@ -268,7 +280,12 @@ export default function Reportes() {
       );
     }
     if (columna.tipo === "jugador") {
-      return fila.nombre + " " + fila.apellido;
+      return (
+        <span className="con-escudo">
+          <Avatar nombre={fila.nombre} apellido={fila.apellido} color={colorDeEquipo(fila.equipo)} tamano={24} />
+          {fila.nombre} {fila.apellido}
+        </span>
+      );
     }
     if (columna.tipo === "decimal") {
       return Number(valor).toFixed(2);
