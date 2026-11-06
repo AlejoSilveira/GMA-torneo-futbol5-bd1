@@ -4,6 +4,7 @@ import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos"
 import { listarEquipos } from "../api/equipos";
 import { listarPartidos, listarTurnos } from "../api/partidos";
 import { listarSanciones } from "../api/sanciones";
+import Escudo from "../components/Escudo";
 
 const nombresEstado = {
   inscripcion: "Inscripción",
@@ -150,7 +151,13 @@ export default function Inicio() {
               {pendientes.map((p) => (
                 <div key={p.id_partido} className="fila-panel">
                   <span>
-                    {nombreEquipo(p.id_equipo_local)} vs {nombreEquipo(p.id_equipo_visitante)}
+                    <span className="con-escudo">
+                      <Escudo id={p.id_equipo_local} nombre={nombreEquipo(p.id_equipo_local)} tamano={18} />
+                      {nombreEquipo(p.id_equipo_local)}
+                      <span className="vs">vs</span>
+                      {nombreEquipo(p.id_equipo_visitante)}
+                      <Escudo id={p.id_equipo_visitante} nombre={nombreEquipo(p.id_equipo_visitante)} tamano={18} />
+                    </span>
                     <span className="detalle">
                       Fecha {p.numero_fecha} · {formatearDia(p.dia)}
                     </span>
@@ -166,7 +173,13 @@ export default function Inicio() {
               {proximos.map((p) => (
                 <div key={p.id_partido} className="fila-panel">
                   <span>
-                    {nombreEquipo(p.id_equipo_local)} vs {nombreEquipo(p.id_equipo_visitante)}
+                    <span className="con-escudo">
+                      <Escudo id={p.id_equipo_local} nombre={nombreEquipo(p.id_equipo_local)} tamano={18} />
+                      {nombreEquipo(p.id_equipo_local)}
+                      <span className="vs">vs</span>
+                      {nombreEquipo(p.id_equipo_visitante)}
+                      <Escudo id={p.id_equipo_visitante} nombre={nombreEquipo(p.id_equipo_visitante)} tamano={18} />
+                    </span>
                     <span className="detalle">
                       {formatearDia(p.dia)} · {horaTurno(p.id_turno)} · {p.nombre_cancha}
                     </span>

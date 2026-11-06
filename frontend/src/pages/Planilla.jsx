@@ -14,6 +14,7 @@ import {
   agregarTarjeta,
   borrarTarjeta,
 } from "../api/planillas";
+import Escudo from "../components/Escudo";
 
 const golVacio = { ci_jugador: "", minuto: "", autogol: false };
 const tarjetaVacia = { ci_jugador: "", minuto: "", color: "amarilla" };
@@ -318,7 +319,10 @@ export default function Planilla() {
   function columnaEquipo(idEquipo, plantel, editable) {
     return (
       <div className="columna-equipo">
-        <h3>{nombreEquipo(idEquipo)}</h3>
+        <h3 className="con-escudo">
+          <Escudo id={idEquipo} nombre={nombreEquipo(idEquipo)} tamano={22} />
+          {nombreEquipo(idEquipo)}
+        </h3>
         {plantel.map((j) => {
           const suspendido = partido && estaSuspendido(sanciones, j.ci_jugador, partido.numero_fecha);
           return (
@@ -389,7 +393,12 @@ export default function Planilla() {
             <tr key={p.id_partido}>
               <td className="numero">{p.numero_fecha}</td>
               <td>{formatearDia(p.dia)}</td>
-              <td className="derecha">{nombreEquipo(p.id_equipo_local)}</td>
+              <td className="derecha">
+                <span className="con-escudo">
+                  {nombreEquipo(p.id_equipo_local)}
+                  <Escudo id={p.id_equipo_local} nombre={nombreEquipo(p.id_equipo_local)} tamano={22} />
+                </span>
+              </td>
               <td className="centro">
                 {p.estado === "jugado" ? (
                   <span className="marcador">{p.goles_local} - {p.goles_visitante}</span>
@@ -397,7 +406,12 @@ export default function Planilla() {
                   <span className="vs">vs</span>
                 )}
               </td>
-              <td>{nombreEquipo(p.id_equipo_visitante)}</td>
+              <td>
+                <span className="con-escudo">
+                  <Escudo id={p.id_equipo_visitante} nombre={nombreEquipo(p.id_equipo_visitante)} tamano={22} />
+                  {nombreEquipo(p.id_equipo_visitante)}
+                </span>
+              </td>
               <td>
                 <span className={"estado estado-" + p.estado}>{p.estado}</span>
               </td>
@@ -420,11 +434,17 @@ export default function Planilla() {
       {partido && (
         <div className="seccion">
           <div className="encabezado-partido">
-            <span className="equipo-grande derecha">{nombreEquipo(partido.id_equipo_local)}</span>
+            <span className="equipo-grande derecha">
+              {nombreEquipo(partido.id_equipo_local)}
+              <Escudo id={partido.id_equipo_local} nombre={nombreEquipo(partido.id_equipo_local)} tamano={40} />
+            </span>
             <span className="marcador marcador-grande">
               {partido.goles_local} - {partido.goles_visitante}
             </span>
-            <span className="equipo-grande">{nombreEquipo(partido.id_equipo_visitante)}</span>
+            <span className="equipo-grande">
+              <Escudo id={partido.id_equipo_visitante} nombre={nombreEquipo(partido.id_equipo_visitante)} tamano={40} />
+              {nombreEquipo(partido.id_equipo_visitante)}
+            </span>
           </div>
           <p className="detalle centro">
             Fecha {partido.numero_fecha} · {formatearDia(partido.dia)} · {partido.nombre_cancha}

@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Pelota from "./Pelota";
 
 const menuAdmin = [
   { ruta: "/admin", texto: "Inicio" },
@@ -34,7 +35,10 @@ export default function Layout() {
   return (
     <div>
       <header>
-        <strong>Torneo Fútbol 5</strong>
+        <strong className="marca">
+          <Pelota tamano={26} className="pelota-marca" />
+          Torneo Fútbol 5
+        </strong>
         <nav>
           {menu.map((item) => (
             <NavLink key={item.ruta} to={item.ruta} end>
