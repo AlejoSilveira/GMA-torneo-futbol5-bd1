@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos } from "../api/torneos";
+import { listarTorneos, nombreTorneo } from "../api/torneos";
 import { listarEquipos, listarPlantel } from "../api/equipos";
 import { listarTurnos, listarPartidos, obtenerPartido, cambiarEstadoPartido } from "../api/partidos";
 import { listarSanciones, estaSuspendido } from "../api/sanciones";
@@ -357,7 +357,7 @@ export default function Planilla() {
           >
             {torneos.map((t) => (
               <option key={t.id_torneo} value={t.id_torneo}>
-                {t.nombre} {t.anio} - {t.semestre}º semestre
+                {nombreTorneo(t)}
               </option>
             ))}
           </select>

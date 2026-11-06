@@ -101,3 +101,11 @@ export async function cambiarEstadoTorneo(id, estado) {
   }
   return pedir("/torneos/" + id + "/estado", "PATCH", { estado: estado });
 }
+
+// el nombre puede venir con la edición incluida (como en los datos de prueba) o sin ella
+export function nombreTorneo(t) {
+  if (t.nombre.includes(String(t.anio))) {
+    return t.nombre;
+  }
+  return t.nombre + " " + t.anio + " - " + t.semestre + "º semestre";
+}

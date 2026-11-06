@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listarTorneos } from "../api/torneos";
+import { listarTorneos, nombreTorneo } from "../api/torneos";
 import { listarEquipos } from "../api/equipos";
 import { listarComplejos, listarCanchas } from "../api/complejos";
 import {
@@ -277,7 +277,7 @@ export default function Partidos() {
           >
             {torneos.map((t) => (
               <option key={t.id_torneo} value={t.id_torneo}>
-                {t.nombre} {t.anio} - {t.semestre}º semestre
+                {nombreTorneo(t)}
               </option>
             ))}
           </select>
