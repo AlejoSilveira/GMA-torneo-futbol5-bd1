@@ -11,6 +11,7 @@ import {
   cambiarCamiseta,
   quitarDelPlantel,
 } from "../api/equipos";
+import Escudo from "../components/Escudo";
 
 const equipoVacio = { nombre: "", id_facultad: "" };
 const jugadorVacio = { ci_jugador: "", numero_camiseta: "" };
@@ -397,7 +398,12 @@ export default function Equipos() {
           )}
           {equipos.map((eq) => (
             <tr key={eq.id_equipo}>
-              <td>{eq.nombre}</td>
+              <td>
+                <span className="con-escudo">
+                  <Escudo id={eq.id_equipo} nombre={eq.nombre} />
+                  {eq.nombre}
+                </span>
+              </td>
               <td>{nombreFacultad(eq.id_facultad)}</td>
               <td>{eq.ci_capitan ? nombreJugador(eq.ci_capitan) : "Sin capitán"}</td>
               <td>

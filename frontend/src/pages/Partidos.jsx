@@ -11,6 +11,7 @@ import {
   cambiarEstadoPartido,
 } from "../api/partidos";
 import { normalizar } from "../utils/texto";
+import Escudo from "../components/Escudo";
 
 const partidoVacio = {
   numero_fecha: "",
@@ -481,7 +482,12 @@ export default function Partidos() {
                 {p.nombre_cancha}
                 <span className="detalle">{nombreComplejo(p.id_complejo)}</span>
               </td>
-              <td className="derecha">{nombreEquipo(p.id_equipo_local)}</td>
+              <td className="derecha">
+                <span className="con-escudo">
+                  {nombreEquipo(p.id_equipo_local)}
+                  <Escudo id={p.id_equipo_local} nombre={nombreEquipo(p.id_equipo_local)} tamano={22} />
+                </span>
+              </td>
               <td className="centro">
                 {p.estado === "jugado" ? (
                   <span className="marcador">{p.goles_local} - {p.goles_visitante}</span>
@@ -489,7 +495,12 @@ export default function Partidos() {
                   <span className="vs">vs</span>
                 )}
               </td>
-              <td>{nombreEquipo(p.id_equipo_visitante)}</td>
+              <td>
+                <span className="con-escudo">
+                  <Escudo id={p.id_equipo_visitante} nombre={nombreEquipo(p.id_equipo_visitante)} tamano={22} />
+                  {nombreEquipo(p.id_equipo_visitante)}
+                </span>
+              </td>
               <td>
                 {p.estado === "jugado" ? (
                   <span className="estado estado-jugado">Jugado</span>

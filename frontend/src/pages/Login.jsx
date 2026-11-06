@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Cancha from "../components/Cancha";
+import Pelota from "../components/Pelota";
 
 function esCorreoValido(correo) {
   return correo.includes("@") && correo.includes(".");
@@ -43,30 +45,38 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
-      <h1>Torneo Interfacultades</h1>
-      <form onSubmit={manejarSubmit} noValidate>
-        <label>
-          Correo
-          <input
-            type="email"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}
-          />
-        </label>
-        <label>
-          Contraseña
-          <input
-            type="password"
-            value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
-          />
-        </label>
-        {error !== "" && <p className="error">{error}</p>}
-        <button type="submit" disabled={cargando}>
-          {cargando ? "Ingresando..." : "Ingresar"}
-        </button>
-      </form>
+    <div className="pantalla-login">
+      <Cancha className="cancha-fondo" />
+
+      <div className="pelota-rodando">
+        <Pelota tamano={44} className="pelota-girando" />
+      </div>
+
+      <div className="login">
+        <h1>Torneo Interfacultades</h1>
+        <form onSubmit={manejarSubmit} noValidate>
+          <label>
+            Correo
+            <input
+              type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+            />
+          </label>
+          <label>
+            Contraseña
+            <input
+              type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+            />
+          </label>
+          {error !== "" && <p className="error">{error}</p>}
+          <button type="submit" disabled={cargando}>
+            {cargando ? "Ingresando..." : "Ingresar"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

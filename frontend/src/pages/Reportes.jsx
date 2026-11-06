@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { listarTorneos, nombreTorneo, elegirTorneoActual } from "../api/torneos";
 import { obtenerReporte } from "../api/reportes";
+import Cargando from "../components/Cargando";
+import Escudo from "../components/Escudo";
 
 const reportes = [
   {
@@ -9,7 +11,7 @@ const reportes = [
     descripcion: "Ordenada por puntos, después por diferencia de goles y después por goles a favor. Victoria 3 puntos, empate 1.",
     posicion: true,
     columnas: [
-      { campo: "equipo", titulo: "Equipo" },
+      { campo: "equipo", titulo: "Equipo", tipo: "equipo" },
       { campo: "pj", titulo: "PJ" },
       { campo: "pg", titulo: "PG" },
       { campo: "pe", titulo: "PE" },
@@ -38,7 +40,7 @@ const reportes = [
     descripcion: "1 punto por cada amarilla y 3 por cada roja. El mejor equipo es el de menor puntaje.",
     posicion: true,
     columnas: [
-      { campo: "equipo", titulo: "Equipo" },
+      { campo: "equipo", titulo: "Equipo", tipo: "equipo" },
       { campo: "amarillas", titulo: "Amarillas" },
       { campo: "rojas", titulo: "Rojas" },
       { campo: "puntaje", titulo: "Puntaje", destacado: true },
@@ -221,6 +223,14 @@ export default function Reportes() {
 
   function valorCelda(fila, columna) {
     const valor = fila[columna.campo];
+    if (columna.tipo === "equipo") {
+      return (
+        <span className="con-escudo">
+          <Escudo id={fila.id_equipo} nombre={valor} tamano={22} />
+          {valor}
+        </span>
+      );
+    }
     if (columna.tipo === "jugador") {
       return fila.nombre + " " + fila.apellido;
     }
@@ -300,7 +310,9 @@ export default function Reportes() {
             <tbody>
               {cargando && (
                 <tr>
-                  <td colSpan={elegido.columnas.length + 2}>Cargando...</td>
+                  <td colSpan={elegido.columnas.length + 2}>
+                    <Cargando texto="Calculando el reporte" />
+                  </td>
                 </tr>
               )}
               {!cargando && filas.length === 0 && (
