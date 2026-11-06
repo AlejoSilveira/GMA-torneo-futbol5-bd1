@@ -52,6 +52,7 @@ export default function Partidos() {
   const [busqueda, setBusqueda] = useState("");
   const [filtroFecha, setFiltroFecha] = useState("");
   const [filtroEstado, setFiltroEstado] = useState("");
+  const [vista, setVista] = useState("tabla");
 
   async function cargarInicio() {
     try {
@@ -293,6 +294,7 @@ export default function Partidos() {
   });
 
   const hayFiltros = busqueda !== "" || filtroFecha !== "" || filtroEstado !== "";
+  const fechasVisibles = [...new Set(visibles.map((p) => p.numero_fecha))].sort((a, b) => a - b);
 
   function limpiarFiltros() {
     setBusqueda("");
@@ -451,8 +453,25 @@ export default function Partidos() {
             </button>
           )}
         </span>
+        <div className="selector-vista">
+          <button
+            type="button"
+            className={vista === "tabla" ? "activo" : ""}
+            onClick={() => setVista("tabla")}
+          >
+            Tabla
+          </button>
+          <button
+            type="button"
+            className={vista === "tarjetas" ? "activo" : ""}
+            onClick={() => setVista("tarjetas")}
+          >
+            Tarjetas
+          </button>
+        </div>
       </div>
 
+      {vista === "tabla" && (
       <div className="tabla-scroll"><table>
         <thead>
           <tr>
@@ -531,6 +550,77 @@ export default function Partidos() {
           ))}
         </tbody>
       </table></div>
+      )}
+      {vista === "tarjetas" && (
+        <div className="fixture">
+          {visibles.length === 0 && (
+            <p className="detalle">
+              {hayFiltros ? "Ningún partido coincide con la búsqueda" : "Este torneo no tiene partidos programados"}
+            </p>
+          )}
+
+          {fechasVisibles.map((f) => (
+            <section key={f} className="fecha-fixture">
+              <h3>Fecha {f}</h3>
+              <div className="tarjetas-partidos">
+                {visibles
+                  .filter((p) => p.numero_fecha === f)
+                  .map((p) => (
+                    <div
+                      key={p.id_partido}
+                      className={"tarjeta-partido" + (p.estado === "cancelado" ? " cancelada" : "")}
+                    >
+                      <div className="tarjeta-info">
+                        {formatearDia(p.dia)} · {horaTurno(p.id_turno)} · {p.nombre_cancha}
+                      </div>
+
+                      <div className="tarjeta-enfrentamiento">
+                        <span className="tarjeta-equipo">
+                          <Escudo id={p.id_equipo_local} nombre={nombreEquipo(p.id_equipo_local)} tamano={36} />
+                          {nombreEquipo(p.id_equipo_local)}
+                        </span>
+                        {p.estado === "jugado" ? (
+                          <span className="marcador">
+                            {p.goles_local} - {p.goles_visitante}
+                          </span>
+                        ) : (
+                          <span className="vs">vs</span>
+                        )}
+                        <span className="tarjeta-equipo">
+                          <Escudo id={p.id_equipo_visitante} nombre={nombreEquipo(p.id_equipo_visitante)} tamano={36} />
+                          {nombreEquipo(p.id_equipo_visitante)}
+                        </span>
+                      </div>
+
+                      <div className="tarjeta-pie">
+                        {p.estado === "jugado" ? (
+                          <span className="estado estado-jugado">Jugado</span>
+                        ) : (
+                          <select
+                            className={"select-estado estado-" + p.estado}
+                            value={p.estado}
+                            onChange={(e) => cambiarEstado(p, e.target.value)}
+                          >
+                            <option value="programado">Programado</option>
+                            <option value="jugado">Jugado</option>
+                            <option value="postergado">Postergado</option>
+                            <option value="cancelado">Cancelado</option>
+                          </select>
+                        )}
+                        {p.estado !== "jugado" && (
+                          <span className="tarjeta-acciones">
+                            <button onClick={() => empezarEdicion(p)}>Reprogramar</button>
+                            <button className="peligro" onClick={() => borrar(p)}>Eliminar</button>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -609,6 +609,184 @@ td.columna-forma {
   gap: 20px;
 }
 
+/* selector tabla / tarjetas */
+.selector-vista {
+  display: inline-flex;
+  margin-left: auto;
+  border: 1px solid var(--azul);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.selector-vista button {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--azul);
+  padding: 6px 14px;
+}
+
+.selector-vista button:hover {
+  transform: none;
+  background-color: #e8edf4;
+}
+
+.selector-vista button.activo {
+  background-color: var(--azul);
+  color: var(--blanco);
+}
+
+/* fixture en tarjetas */
+.fecha-fixture {
+  margin-bottom: 28px;
+}
+
+.fecha-fixture h3 {
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--verde);
+  font-family: "Barlow Condensed", Arial, sans-serif;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--azul);
+}
+
+.tarjetas-partidos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+}
+
+.tarjeta-partido {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px 16px;
+  background-color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-top: 3px solid var(--azul);
+  border-radius: 6px;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.tarjeta-partido:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 37, 69, 0.1);
+}
+
+.tarjeta-partido.cancelada {
+  border-top-color: #b8b2a6;
+  opacity: 0.6;
+}
+
+.tarjeta-info {
+  color: var(--gris);
+  font-size: 13px;
+  text-align: center;
+}
+
+.tarjeta-enfrentamiento {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.tarjeta-equipo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+  text-align: center;
+}
+
+.tarjeta-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #ebe7df;
+}
+
+.tarjeta-acciones button {
+  margin-left: 6px;
+  padding: 5px 12px;
+  font-size: 13px;
+}
+
+/* mensajes generales de cada pantalla: aviso flotante abajo al centro */
+main > div > .error,
+main > div > .mensaje {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(560px, calc(100% - 32px));
+  margin: 0;
+  padding: 16px 22px;
+  border-left-width: 6px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  transform: translateX(-50%);
+  animation: aparecer-aviso 0.25s ease;
+}
+
+/* error: tarjeta amarilla */
+main > div > .error::before {
+  content: "";
+  flex-shrink: 0;
+  width: 18px;
+  height: 25px;
+  border-radius: 3px;
+  background-color: #f2c200;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: rotate(6deg);
+}
+
+/* éxito: círculo verde con tilde */
+main > div > .mensaje::before {
+  content: "✓";
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--verde);
+  color: var(--blanco);
+  font-size: 15px;
+}
+
+@keyframes aparecer-aviso {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main > div > .error,
+  main > div > .mensaje {
+    animation: none;
+  }
+}
+
 @media (max-width: 560px) {
   .banner-torneo {
     flex-direction: column;
@@ -988,6 +1166,7 @@ td.centro {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.05em;
+  text-align: center;
 }
 
 .vs {
