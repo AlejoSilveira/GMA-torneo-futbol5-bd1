@@ -114,6 +114,6 @@ Requisitos: MySQL 8, Python 3.12 y Node 20 o superior.
 | --- | --- |
 | Frontend | 5173 |
 | Backend | 8000 |
-| MySQL | 3306 |
+| MySQL | 3307 |
 
-Si alguno de estos puertos está ocupado (por ejemplo, por un MySQL instalado en la computadora), hay que detener ese programa antes de levantar el sistema.
+El puerto 3307 se usa para no interferir con un MySQL que ya esté instalado en la computadora. Si algún otro puerto está ocupado, hay que detener ese programa antes de levantar el sistema.
