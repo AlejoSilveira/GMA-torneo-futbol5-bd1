@@ -225,16 +225,27 @@ export default function Reportes() {
     }
   }
 
-  async function cargarReporte() {
+  async function cargarReporte(sigueVigente) {
     setError("");
     setCargando(true);
     try {
-      setFilas(await obtenerReporte(elegido.nombre, idTorneo, elegido.sinTorneo));
-      setEquiposTorneo(await listarEquipos(idTorneo));
+      const datos = await obtenerReporte(elegido.nombre, idTorneo, elegido.sinTorneo);
+      const equipos = await listarEquipos(idTorneo);
+      let nuevaForma = {};
       if (elegido.nombre === "posiciones") {
-        setForma(calcularForma(await listarPartidos(idTorneo)));
+        nuevaForma = calcularForma(await listarPartidos(idTorneo));
       }
+      // si mientras tanto se eligió otro reporte, esta respuesta ya no sirve
+      if (!sigueVigente()) {
+        return;
+      }
+      setFilas(datos);
+      setEquiposTorneo(equipos);
+      setForma(nuevaForma);
     } catch (err) {
+      if (!sigueVigente()) {
+        return;
+      }
       setFilas([]);
       setError(err.message);
     }
@@ -246,9 +257,14 @@ export default function Reportes() {
   }, []);
 
   useEffect(() => {
-    if (idTorneo !== null) {
-      cargarReporte();
+    if (idTorneo === null) {
+      return;
     }
+    let vigente = true;
+    cargarReporte(() => vigente);
+    return () => {
+      vigente = false;
+    };
   }, [idTorneo, elegido]);
 
   // el valor más alto de la columna con barra, para calcular el largo de cada barra
@@ -336,7 +352,14 @@ export default function Reportes() {
             <button
               key={r.nombre}
               className={r.nombre === elegido.nombre ? "activo" : ""}
-              onClick={() => setElegido(r)}
+              onClick={() => {
+                if (r.nombre === elegido.nombre) {
+                  return;
+                }
+                setFilas([]);
+                setCargando(true);
+                setElegido(r);
+              }}
             >
               <span className="indice">{String(i + 1).padStart(2, "0")}</span>
               {r.titulo}
