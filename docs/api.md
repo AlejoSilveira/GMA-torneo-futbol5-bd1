@@ -1,7 +1,6 @@
 # Contrato de API — Torneo Interfacultades Fútbol 5
 
-Borrador para acordar en grupo. Backend y frontend se guían por este archivo para trabajar en paralelo.
-Si se cambia algo, se actualiza acá primero.
+Contrato de la API acordado por el grupo. El backend y el frontend se desarrollaron a partir de este documento.
 
 ## Convenciones
 
