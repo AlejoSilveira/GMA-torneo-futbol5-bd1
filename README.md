@@ -22,7 +22,13 @@ docs/        contrato de la API (api.md)
 
 ## Ejecutar con Docker (recomendado)
 
-Requisitos: tener instalado Docker Desktop y que esté abierto.
+Requisitos:
+
+- Git: descargarlo de https://git-scm.com e instalarlo con las opciones por defecto.
+- Docker Desktop: descargarlo de https://www.docker.com/products/docker-desktop e instalarlo. Antes de usar el sistema, Docker Desktop tiene que estar abierto y mostrar "Engine running".
+- En Windows, si al abrir Docker Desktop aparece un aviso de que falta WSL, ejecutar `wsl --install` en PowerShell como administrador, reiniciar la computadora y volver a abrir Docker Desktop.
+
+Sin Git, también se puede descargar el código desde el botón "Code" → "Download ZIP" del repositorio y descomprimirlo, en lugar del paso 1.
 
 1. Clonar el repositorio:
 
