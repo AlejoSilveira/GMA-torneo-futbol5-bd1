@@ -7,7 +7,10 @@ export function colorEquipo(id) {
 }
 
 function iniciales(nombre) {
-  const palabras = nombre.trim().split(" ").filter((p) => p !== "");
+  const palabras = String(nombre || "").trim().split(" ").filter((p) => p !== "");
+  if (palabras.length === 0) {
+    return "?";
+  }
   if (palabras.length === 1) {
     return palabras[0].slice(0, 2).toUpperCase();
   }
